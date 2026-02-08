@@ -18,7 +18,8 @@ export const SOLANA_CONFIG = {
     },
 
     // Constants
-    MIN_DONATION: 0.0001, // SOL
+    MIN_DONATION: 0.001, // SOL
+    MAX_DONATION: 500, // SOL (whale protection)
     LAMPORTS_PER_SOL: 1_000_000_000,
 };
 

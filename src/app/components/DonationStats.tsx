@@ -75,21 +75,21 @@ export function DonationStats() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-emerald-100 text-sm font-medium mb-1">Total Donors</p>
-            <h3 className=\"text-4xl font-bold\">
+            <h3 className="text-4xl font-bold">
               {loading ? (
-                <span className=\"animate-pulse\">--</span>
+                <span className="animate-pulse">--</span>
               ) : (
                 Math.floor(displayDonors)
               )}
             </h3>
-            <p className=\"text-emerald-100 text-xs mt-1\">Community supporters</p>
+            <p className="text-emerald-100 text-xs mt-1">Community supporters</p>
           </div>
-          <div className=\"text-6xl opacity-20\">❤️</div>
-        </div >
-      </div >
+          <div className="text-6xl opacity-20">❤️</div>
+        </div>
+      </div>
 
-        {/* Status */ }
-        < div className = "bg-gradient-to-br from-[#DC143C] to-[#B91035] rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200" >
+        {/* Status */}
+        <div className="bg-gradient-to-br from-[#DC143C] to-[#B91035] rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
             <div className="flex items-center justify-between">
                 <div>
                     <p className="text-red-100 text-sm font-medium mb-1">Campaign Status</p>

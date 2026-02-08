@@ -3286,3 +3286,463 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' opacity='1'%3E%3Cpath stroke='%23DC143C' stroke-width='0.5' d='M0 40L40 0L80 40L40 80Z'/%3E%3Cpath stroke='%23003893' stroke-width='0.5' d='M20 40L40 20L60 40L40 60Z'/%3E%3Ccircle cx='40' cy='40' r='8' stroke='%23DC143C' stroke-width='0.5'/%3E%3C/g%3E%3C/svg%3E");
   background-size: 80px 80px;
 }
+
+/* ===== Donation Hints (validation) ===== */
+.donation-hint {
+  font-size: 0.8rem;
+  margin-top: -0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.25rem 0;
+}
+.donation-hint.error {
+  color: var(--nepal-crimson-light);
+}
+.donation-hint.info {
+  color: var(--text-muted);
+}
+
+/* ===== Search Bar ===== */
+.search-container {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.875rem 1.25rem 0.875rem 3rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition-normal);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--nepal-crimson);
+  box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.15);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* ===== Social Proof / Recent Donations Feed ===== */
+.social-proof-section {
+  padding: 0 var(--container-padding);
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+}
+
+.social-proof-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.social-proof-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--nepal-success);
+  font-weight: 500;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--nepal-success);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+  box-shadow: 0 0 8px var(--nepal-success);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.donations-feed {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--nepal-crimson) transparent;
+}
+
+.donations-feed::-webkit-scrollbar {
+  height: 4px;
+}
+
+.donations-feed::-webkit-scrollbar-thumb {
+  background: var(--nepal-crimson);
+  border-radius: 4px;
+}
+
+.donation-feed-card {
+  min-width: 280px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  padding: 1.25rem;
+  transition: var(--transition-normal);
+}
+
+.donation-feed-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-2px);
+}
+
+.feed-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.feed-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.feed-donor-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.feed-donor-address {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.feed-amount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--nepal-crimson-light);
+  margin-bottom: 0.25rem;
+}
+
+.feed-campaign {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-message {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+/* ===== Report Campaign Button ===== */
+.report-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
+
+.report-button:hover {
+  border-color: var(--nepal-crimson);
+  color: var(--nepal-crimson-light);
+  background: rgba(220, 20, 60, 0.05);
+}
+
+.report-button:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+.report-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===== Platform Stats Bar ===== */
+.platform-stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem var(--container-padding);
+  margin: 0 auto 2rem;
+  max-width: 900px;
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.platform-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.platform-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.platform-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ===== Donor count on campaign card ===== */
+.card-donors {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.card-donors svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0.8;
+}
+
+/* ===== Enhanced Mobile Responsive ===== */
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .hero-logo-img {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .trust-signals {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .category-filter {
+    gap: 0.4rem;
+  }
+
+  .filter-btn {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .detail-title {
+    font-size: 1.5rem;
+  }
+
+  .detail-description {
+    font-size: 1rem;
+  }
+
+  .detail-meta {
+    gap: 0.75rem;
+  }
+
+  .donate-card {
+    padding: 1.25rem;
+  }
+
+  .donate-title {
+    font-size: 1.1rem;
+  }
+
+  .quick-amounts {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .form-container {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+
+  .form-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .footer-content {
+    gap: 1.5rem;
+  }
+
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .platform-stats-bar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .donations-feed {
+    gap: 0.75rem;
+  }
+
+  .donation-feed-card {
+    min-width: 240px;
+  }
+
+  .section-header {
+    padding: 0 0.5rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .navbar-container {
+    padding: 0 0.75rem;
+  }
+
+  .logo-text {
+    font-size: 1rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+  .hero-title {
+    font-size: 1.5rem;
+  }
+  
+  .hero-actions {
+    gap: 0.5rem;
+  }
+  
+  .action-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .quick-amounts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .platform-stats-bar {
+    gap: 0.75rem;
+  }
+
+  .platform-stat-value {
+    font-size: 1.25rem;
+  }
+}
+
+/* Tablet landscape */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .campaign-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detail-container {
+    gap: 2rem;
+  }
+
+  .donations-feed {
+    gap: 0.75rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .card-donate-btn {
+    padding: 1rem 1.5rem;
+    min-height: 48px;
+  }
+
+  .donate-button {
+    padding: 1.125rem;
+    min-height: 52px;
+  }
+
+  .quick-amount-btn {
+    padding: 0.875rem;
+    min-height: 48px;
+  }
+
+  .action-btn {
+    min-height: 48px;
+  }
+
+  .filter-btn {
+    min-height: 44px;
+  }
+}

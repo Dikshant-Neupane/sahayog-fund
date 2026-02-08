@@ -31,11 +31,11 @@ export function useDonationStats() {
         try {
             const donationStatePDA = getDonationStatePDA();
             // Try to fetch state. If it fails (account doesn't exist yet), return defaults
-            const stateAccount = await program.account.donationState.fetch(donationStatePDA);
+            const stateAccount = await (program.account as any).donationState.fetch(donationStatePDA);
 
             setStats({
-                totalDonations: stateAccount.totalDonations.toNumber() / SOLANA_CONFIG.LAMPORTS_PER_SOL,
-                totalDonors: stateAccount.totalDonors.toNumber(),
+                totalDonations: (stateAccount.totalDonated || stateAccount.totalDonations)?.toNumber() / SOLANA_CONFIG.LAMPORTS_PER_SOL || 0,
+                totalDonors: (stateAccount.donorCount || stateAccount.totalDonors)?.toNumber() || 0,
                 isActive: stateAccount.isActive,
                 loading: false,
                 error: null,

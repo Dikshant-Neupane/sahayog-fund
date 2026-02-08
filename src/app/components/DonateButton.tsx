@@ -9,12 +9,17 @@ import {
     LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import toast from "react-hot-toast";
+import confetti from "canvas-confetti";
 
 interface DonateButtonProps {
     campaignId: string;
     walletAddress: string;
     campaignTitle: string;
 }
+
+// Validation constants
+const MIN_DONATION_SOL = 0.001;
+const MAX_DONATION_SOL = 500;
 
 const DonateButton = ({
     campaignId,
@@ -23,16 +28,41 @@ const DonateButton = ({
 }: DonateButtonProps) => {
     const [amount, setAmount] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [txPhase, setTxPhase] = useState<string>("");
 
     const { connection } = useConnection();
-    const { publicKey, sendTransaction } = useWallet();
+    const { publicKey, sendTransaction, connected } = useWallet();
 
     // Quick amount buttons
     const quickAmounts = [0.1, 0.5, 1, 2];
 
+    const fireConfetti = () => {
+        const duration = 2000;
+        const animationEnd = Date.now() + duration;
+        const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+        const interval = setInterval(() => {
+            const timeLeft = animationEnd - Date.now();
+            if (timeLeft <= 0) return clearInterval(interval);
+            const particleCount = 50 * (timeLeft / duration);
+            confetti({
+                startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999,
+                particleCount,
+                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                colors: ['#DC143C', '#003893', '#FFFFFF', '#22A35D', '#F7B32B']
+            });
+            confetti({
+                startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999,
+                particleCount,
+                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                colors: ['#DC143C', '#003893', '#FFFFFF', '#22A35D', '#F7B32B']
+            });
+        }, 250);
+    };
+
     const handleDonate = useCallback(async () => {
         // Step 1: Check if wallet is connected
-        if (!publicKey) {
+        if (!publicKey || !connected) {
             toast.error("Please connect your wallet first!", {
                 icon: "🔗",
                 style: {
@@ -58,9 +88,35 @@ const DonateButton = ({
             return;
         }
 
-        // Step 3: Set loading state
+        // Step 3: Validate min/max bounds
+        if (donationAmount < MIN_DONATION_SOL) {
+            toast.error(`Minimum donation is ${MIN_DONATION_SOL} SOL`, {
+                icon: "💰",
+                style: {
+                    background: "#0A0E1A",
+                    color: "#fff",
+                    border: "1px solid #DC143C",
+                },
+            });
+            return;
+        }
+
+        if (donationAmount > MAX_DONATION_SOL) {
+            toast.error(`Maximum donation is ${MAX_DONATION_SOL} SOL per transaction`, {
+                icon: "🐋",
+                style: {
+                    background: "#0A0E1A",
+                    color: "#fff",
+                    border: "1px solid #DC143C",
+                },
+            });
+            return;
+        }
+
+        // Step 4: Set loading state
         setIsLoading(true);
-        const loadingToast = toast.loading("Processing your donation...", {
+        setTxPhase("preparing");
+        const loadingToast = toast.loading("Preparing transaction...", {
             style: {
                 background: "#0A0E1A",
                 color: "#fff",
@@ -69,10 +125,32 @@ const DonateButton = ({
         });
 
         try {
-            // Step 4: Create the transaction
-            const transaction = new Transaction();
+            // Step 5: Check wallet balance
+            setTxPhase("checking");
+            const balance = await connection.getBalance(publicKey);
+            const requiredLamports = Math.floor(donationAmount * LAMPORTS_PER_SOL) + 5000; // 5000 for tx fee
+            if (balance < requiredLamports) {
+                toast.dismiss(loadingToast);
+                toast.error(
+                    `Insufficient balance. You have ${(balance / LAMPORTS_PER_SOL).toFixed(4)} SOL but need ~${(requiredLamports / LAMPORTS_PER_SOL).toFixed(4)} SOL`,
+                    {
+                        icon: "💸",
+                        duration: 5000,
+                        style: {
+                            background: "#0A0E1A",
+                            color: "#fff",
+                            border: "1px solid #DC143C",
+                        },
+                    }
+                );
+                return;
+            }
 
-            // Step 5: Add transfer instruction
+            // Step 6: Create the transaction
+            setTxPhase("building");
+            toast.loading("Building transaction...", { id: loadingToast });
+
+            const transaction = new Transaction();
             transaction.add(
                 SystemProgram.transfer({
                     fromPubkey: publicKey,
@@ -81,21 +159,29 @@ const DonateButton = ({
                 })
             );
 
-            // Step 6: Send the transaction
+            // Step 7: Send the transaction
+            setTxPhase("signing");
+            toast.loading("Please approve in your wallet...", { id: loadingToast });
+
             const signature = await sendTransaction(transaction, connection);
 
-            // Step 7: Wait for confirmation
+            // Step 8: Wait for confirmation
+            setTxPhase("confirming");
+            toast.loading("Confirming on Solana...", { id: loadingToast });
+
+            const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('confirmed');
             const confirmation = await connection.confirmTransaction(
-                signature,
+                { signature, blockhash, lastValidBlockHeight },
                 "confirmed"
             );
 
             if (confirmation.value.err) {
-                throw new Error("Transaction failed to confirm");
+                throw new Error("Transaction failed to confirm on-chain");
             }
 
-            // Step 8: Show success message with rhododendron flourish
+            // Step 9: Show success with confetti
             toast.dismiss(loadingToast);
+            fireConfetti();
             toast.success(
                 <div className="toast-success-content">
                     <p>
@@ -122,15 +208,39 @@ const DonateButton = ({
                 }
             );
 
-            // Clear the amount
             setAmount("");
         } catch (error: unknown) {
-            // Step 8 (error): Show error message
             toast.dismiss(loadingToast);
-            const errorMessage =
-                error instanceof Error ? error.message : "Transaction failed";
+
+            // Detailed error handling
+            const errStr = error instanceof Error ? error.message : String(error);
+
+            let errorMessage = "Transaction failed. Please try again.";
+            let errorIcon = "❌";
+
+            if (errStr.includes("User rejected") || errStr.includes("rejected")) {
+                errorMessage = "Transaction cancelled by user";
+                errorIcon = "🚫";
+            } else if (errStr.includes("0x1") || errStr.includes("insufficient")) {
+                errorMessage = "Insufficient funds for this transaction";
+                errorIcon = "💸";
+            } else if (errStr.includes("blockhash") || errStr.includes("block height")) {
+                errorMessage = "Transaction expired. Please try again.";
+                errorIcon = "⏱️";
+            } else if (errStr.includes("Network") || errStr.includes("fetch") || errStr.includes("ECONNREFUSED")) {
+                errorMessage = "Network error. Check your connection and try again.";
+                errorIcon = "📡";
+            } else if (errStr.includes("rate") || errStr.includes("429")) {
+                errorMessage = "Too many requests. Please wait a moment.";
+                errorIcon = "⏳";
+            } else if (errStr.includes("AccountNotFound") || errStr.includes("no record")) {
+                errorMessage = "Wallet has no SOL. Get Devnet SOL from faucet.solana.com";
+                errorIcon = "🪙";
+            }
+
             toast.error(errorMessage, {
-                icon: "❌",
+                icon: errorIcon,
+                duration: 5000,
                 style: {
                     background: "#0A0E1A",
                     color: "#fff",
@@ -139,15 +249,28 @@ const DonateButton = ({
             });
         } finally {
             setIsLoading(false);
+            setTxPhase("");
         }
     }, [
         publicKey,
+        connected,
         amount,
         walletAddress,
         campaignTitle,
         connection,
         sendTransaction,
     ]);
+
+    // Get loading phase text
+    const getLoadingText = () => {
+        switch (txPhase) {
+            case "checking": return "Checking balance...";
+            case "building": return "Building transaction...";
+            case "signing": return "Approve in wallet...";
+            case "confirming": return "Confirming on-chain...";
+            default: return "Processing...";
+        }
+    };
 
     return (
         <div className="donate-section">
@@ -163,33 +286,46 @@ const DonateButton = ({
                             }`}
                         onClick={() => setAmount(quickAmount.toString())}
                         disabled={isLoading}
+                        aria-label={`Set donation amount to ${quickAmount} SOL`}
                     >
                         {quickAmount} SOL
                     </button>
                 ))}
             </div>
 
-            {/* Amount Input */}
+            {/* Amount Input with validation hints */}
             <div className="amount-input-container">
                 <input
                     type="number"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    placeholder="Enter amount in SOL"
+                    placeholder={`Min ${MIN_DONATION_SOL} — Max ${MAX_DONATION_SOL} SOL`}
                     className="amount-input"
-                    min="0"
+                    min={MIN_DONATION_SOL}
+                    max={MAX_DONATION_SOL}
                     step="0.01"
                     disabled={isLoading}
+                    aria-label="Donation amount in SOL"
                 />
                 <span className="sol-suffix">SOL</span>
             </div>
 
-            {/* Donate Button */}
+            {/* Validation hint */}
+            {amount && parseFloat(amount) > 0 && parseFloat(amount) < MIN_DONATION_SOL && (
+                <p className="donation-hint error">Minimum donation: {MIN_DONATION_SOL} SOL</p>
+            )}
+            {amount && parseFloat(amount) > MAX_DONATION_SOL && (
+                <p className="donation-hint error">Maximum donation: {MAX_DONATION_SOL} SOL per transaction</p>
+            )}
+
+            {/* Donate Button with loading states */}
             <button
                 type="button"
                 onClick={handleDonate}
-                disabled={isLoading || !amount}
+                disabled={isLoading || !amount || !connected || parseFloat(amount) < MIN_DONATION_SOL || parseFloat(amount) > MAX_DONATION_SOL}
                 className={`donate-button ${isLoading ? "loading" : ""}`}
+                aria-busy={isLoading}
+                aria-disabled={isLoading || !amount || !connected}
             >
                 {isLoading ? (
                     <span className="loading-content">
@@ -206,7 +342,7 @@ const DonateButton = ({
                                 strokeDashoffset="45"
                             />
                         </svg>
-                        Processing...
+                        {getLoadingText()}
                     </span>
                 ) : (
                     <span className="donate-content">

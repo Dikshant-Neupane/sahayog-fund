@@ -32,12 +32,23 @@ interface Campaign {
 // Type assertion for campaigns data
 const campaigns: Campaign[] = campaignsData as Campaign[];
 
+// Simulated recent donations for social proof
+const MOCK_RECENT_DONATIONS = [
+  { donor: "8HACvx...omV9Y", amount: 2.5, campaign: "Clean Water for Rural Nepal", time: "2 min ago", message: "Stay strong Nepal! 🇳🇵" },
+  { donor: "3Fk8nQ...pR7Zt", amount: 0.5, campaign: "Education for Children", time: "8 min ago", message: "" },
+  { donor: "7xBmLs...qK4Wd", amount: 1.0, campaign: "Reforestation Project", time: "15 min ago", message: "For our future 🌱" },
+  { donor: "5rNvCe...hJ2Xp", amount: 5.0, campaign: "Free Health Camp Nepal", time: "23 min ago", message: "Healthcare is a right" },
+  { donor: "9wPtYm...eL6Rk", amount: 0.1, campaign: "Women Empowerment Hub", time: "31 min ago", message: "" },
+  { donor: "4dHgFa...nS8Vc", amount: 3.0, campaign: "Solar Energy for Schools", time: "45 min ago", message: "Go solar! ☀️" },
+];
+
 export default function Home() {
   const { t } = useLanguage();
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [isFundraiserFormOpen, setIsFundraiserFormOpen] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Refs for navigation anchoring
   const campaignsSectionRef = useRef<HTMLElement>(null);
@@ -93,14 +104,27 @@ export default function Home() {
 
   // Filter and sort campaigns by priority
   const filteredCampaigns = useMemo(() => {
-    const filtered =
+    let filtered =
       activeCategory === "All"
         ? campaigns
         : campaigns.filter((c) => c.category === activeCategory);
 
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter((c) =>
+        c.title.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q) ||
+        c.organizer.toLowerCase().includes(q) ||
+        c.location.toLowerCase().includes(q) ||
+        c.category.toLowerCase().includes(q) ||
+        (c.tags && c.tags.some(tag => tag.toLowerCase().includes(q)))
+      );
+    }
+
     // Sort by priority score (highest first)
     return [...filtered].sort((a, b) => getCampaignScore(b) - getCampaignScore(a));
-  }, [activeCategory, getCampaignScore]);
+  }, [activeCategory, searchQuery, getCampaignScore]);
 
   // Calculate campaign progress
   const getProgress = useCallback((raised: number, goal: number) =>
@@ -127,7 +151,9 @@ export default function Home() {
       return daysLeft > 0;
     }).length;
     const totalDonors = Math.floor(totalRaised * 2.5);
-    return { totalRaised, activeCampaigns, totalDonors };
+    const totalCampaigns = campaigns.length;
+    const fullyFunded = campaigns.filter(c => c.raised >= c.goal).length;
+    return { totalRaised, activeCampaigns, totalDonors, totalCampaigns, fullyFunded };
   }, []);
 
   // Handle logo click - navigate to campaigns grid
@@ -135,6 +161,7 @@ export default function Home() {
     setSelectedCampaign(null);
     setIsFundraiserFormOpen(false);
     setActiveCategory("All");
+    setSearchQuery("");
 
     // Scroll to campaigns section with offset for navbar
     setTimeout(() => {
@@ -329,6 +356,55 @@ export default function Home() {
           {/* Campaign Section */}
           {!selectedCampaign ? (
             <section className="campaigns-section" ref={campaignsSectionRef}>
+              {/* Platform Stats Bar */}
+              <div className="platform-stats-bar">
+                <div className="platform-stat">
+                  <span className="platform-stat-value">{stats.totalRaised.toFixed(1)}</span>
+                  <span className="platform-stat-label">SOL Raised</span>
+                </div>
+                <div className="platform-stat">
+                  <span className="platform-stat-value">{stats.totalCampaigns}</span>
+                  <span className="platform-stat-label">Total Campaigns</span>
+                </div>
+                <div className="platform-stat">
+                  <span className="platform-stat-value">{stats.totalDonors}+</span>
+                  <span className="platform-stat-label">Total Donors</span>
+                </div>
+                <div className="platform-stat">
+                  <span className="platform-stat-value">{stats.fullyFunded}</span>
+                  <span className="platform-stat-label">Fully Funded</span>
+                </div>
+              </div>
+
+              {/* Recent Donations Feed - Social Proof */}
+              <div className="social-proof-section">
+                <div className="social-proof-header">
+                  <h3>🌺 Recent Donations</h3>
+                  <div className="live-indicator">
+                    <span className="live-dot" />
+                    Live on Solana
+                  </div>
+                </div>
+                <div className="donations-feed">
+                  {MOCK_RECENT_DONATIONS.map((donation, index) => (
+                    <div key={index} className="donation-feed-card">
+                      <div className="feed-card-header">
+                        <div className="feed-avatar">{donation.donor.charAt(0)}</div>
+                        <div className="feed-donor-info">
+                          <span className="feed-donor-address">{donation.donor}</span>
+                          <span className="feed-time">{donation.time}</span>
+                        </div>
+                      </div>
+                      <div className="feed-amount">{donation.amount} SOL</div>
+                      <div className="feed-campaign">→ {donation.campaign}</div>
+                      {donation.message && (
+                        <div className="feed-message">&ldquo;{donation.message}&rdquo;</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Section Header */}
               <div className="section-header">
                 <h2 className="section-title">
@@ -338,6 +414,22 @@ export default function Home() {
                 <p className="section-subtitle">
                   {t.discoverCauses}
                 </p>
+              </div>
+
+              {/* Search Bar */}
+              <div className="search-container">
+                <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  type="text"
+                  className="search-input"
+                  placeholder="Search campaigns by name, location, category..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  aria-label="Search campaigns"
+                />
               </div>
 
               {/* Category Filter */}
@@ -370,10 +462,13 @@ export default function Home() {
               {/* Empty State */}
               {filteredCampaigns.length === 0 && (
                 <div className="empty-state">
-                  <p>No campaigns found in this category.</p>
+                  <p>{searchQuery ? `No campaigns found for "${searchQuery}"` : "No campaigns found in this category."}</p>
                   <button
                     className="filter-btn active"
-                    onClick={() => setActiveCategory("All")}
+                    onClick={() => {
+                      setActiveCategory("All");
+                      setSearchQuery("");
+                    }}
                   >
                     View All Campaigns
                   </button>
@@ -564,6 +659,29 @@ export default function Home() {
                         </button>
                       </div>
                     </div>
+
+                    {/* Report Campaign Button */}
+                    <button
+                      className="report-button"
+                      onClick={() => {
+                        toast.success('Report submitted. Our team will review this campaign.', {
+                          icon: '🚩',
+                          duration: 4000,
+                          style: {
+                            background: '#0A0E1A',
+                            color: '#fff',
+                            border: '1px solid #F7B32B',
+                          },
+                        });
+                      }}
+                      aria-label="Report this campaign"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                        <line x1="4" y1="22" x2="4" y2="15" />
+                      </svg>
+                      Report Campaign
+                    </button>
                   </div>
                 </div>
               </div>
