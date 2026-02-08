@@ -300,26 +300,6 @@ sahayog-fund/
 └── README.md
 ```
 
----
-
-## 🏆 Hackathon Evaluation Criteria
-
-### 1. Problem Statement & Clarity (18/20)
-Crystal clear: "Many Nepalis want to donate to verified causes but don't trust random fundraisers." Extremely relevant in Nepal right now.
-
-### 2. Potential Impact (19/20)
-Could genuinely become the "GoFundMe of Nepal" on Solana. Transparent, low-fee donations are a killer use-case here.
-
-### 3. UX & Polish (17/20)
-Super clean, mobile-first design. Feels like a real product, not a hackathon project. Dark mode, Nepali language toggle, beautiful campaign cards.
-
-### 4. Technical Implementation (18/20)
-Uses Solana Pay + proper wallet adapter, escrow program in Anchor, on-chain verification badges, USDC + native SOL donations. No shortcuts.
-
-### 5. Bonus: Solana Native Features (+5)
-Uses Token Extensions (transfer fees for platform sustainability), on-chain metadata, compressed NFTs for donor badges.
-
----
 
 ## 🤝 Contributing
 
