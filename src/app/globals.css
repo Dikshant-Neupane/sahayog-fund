@@ -1,26 +1,3288 @@
 @import "tailwindcss";
 
+/* ===== Nepal National Identity Design System ===== */
+/* Built by Nepalis, for Nepalis, on global infrastructure */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ===== Nepal Color Palette ===== */
+  /* Primary: Crimson Red - representing bravery and rhododendron */
+  --nepal-crimson: #DC143C;
+  --nepal-crimson-dark: #B91030;
+  --nepal-crimson-light: #E8365A;
+  --nepal-crimson-glow: rgba(220, 20, 60, 0.4);
+  
+  /* Secondary: Dark Blue - representing peace and harmony */
+  --nepal-blue: #003893;
+  --nepal-blue-dark: #002D77;
+  --nepal-blue-light: #0047B3;
+  --nepal-blue-glow: rgba(0, 56, 147, 0.4);
+  
+  /* Accent: Pure White - representing moon and sun symbols */
+  --nepal-white: #FFFFFF;
+  --nepal-white-soft: rgba(255, 255, 255, 0.95);
+  
+  /* Success Green - rhododendron leaves */
+  --nepal-success: #22A35D;
+  --nepal-success-light: #2EC96F;
+  
+  /* Warning/Hope - diya lamp golden */
+  --nepal-gold: #F7B32B;
+  --nepal-gold-light: #FFD166;
+
+  /* ===== Semantic Colors ===== */
+  --primary: var(--nepal-crimson);
+  --primary-dark: var(--nepal-crimson-dark);
+  --primary-light: var(--nepal-crimson-light);
+  --secondary: var(--nepal-blue);
+  --secondary-dark: var(--nepal-blue-dark);
+  --secondary-light: var(--nepal-blue-light);
+  --accent: var(--nepal-white);
+  --success: var(--nepal-success);
+  --warning: var(--nepal-gold);
+
+  /* ===== Background Colors ===== */
+  --bg-dark: #1A202C;
+  --bg-darker: #151921;
+  --bg-card: rgba(26, 32, 44, 0.85);
+  --bg-card-hover: rgba(30, 37, 52, 0.95);
+  --bg-input: rgba(21, 25, 33, 0.9);
+  --bg-glass: rgba(26, 32, 44, 0.6);
+
+  /* ===== Text Colors ===== */
+  --text-primary: #FFFFFF;
+  --text-secondary: #B4C6E7;
+  --text-muted: #7A8DB5;
+  --text-on-crimson: #FFFFFF;
+  --text-on-blue: #FFFFFF;
+
+  /* ===== Border Colors ===== */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(220, 20, 60, 0.4);
+  --border-blue: rgba(0, 56, 147, 0.4);
+  --border-glass: rgba(255, 255, 255, 0.12);
+
+  /* ===== Nepal Mesh Gradients (Instagram/Stripe style) ===== */
+  --gradient-primary: linear-gradient(135deg, var(--nepal-crimson) 0%, var(--nepal-blue) 100%);
+  --gradient-primary-vibrant: linear-gradient(135deg, #E8365A 0%, #DC143C 40%, #003893 100%);
+  --gradient-crimson: linear-gradient(135deg, #DC143C 0%, #B91030 100%);
+  --gradient-blue: linear-gradient(135deg, #003893 0%, #002D77 100%);
+  --gradient-hope: linear-gradient(135deg, #DC143C 0%, #F7B32B 50%, #003893 100%);
+  
+  /* Mesh gradient for backgrounds */
+  --gradient-mesh: 
+    radial-gradient(ellipse at 0% 0%, rgba(220, 20, 60, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 0%, rgba(0, 56, 147, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(220, 20, 60, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 100% 100%, rgba(0, 56, 147, 0.1) 0%, transparent 50%);
+  
+  /* Card gradients with glassmorphism */
+  --gradient-card: linear-gradient(145deg, rgba(15, 20, 40, 0.9) 0%, rgba(10, 14, 26, 0.95) 100%);
+  --gradient-card-crimson: linear-gradient(145deg, rgba(220, 20, 60, 0.08) 0%, rgba(10, 14, 26, 0.95) 100%);
+  --gradient-card-blue: linear-gradient(145deg, rgba(0, 56, 147, 0.08) 0%, rgba(10, 14, 26, 0.95) 100%);
+  
+  /* Progress bar gradient */
+  --gradient-progress: linear-gradient(90deg, var(--nepal-crimson) 0%, var(--nepal-crimson-light) 40%, var(--nepal-blue) 100%);
+
+  /* ===== Glassmorphism ===== */
+  --glass-bg: rgba(10, 14, 30, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(20px);
+
+  /* ===== Shadows ===== */
+  --shadow-crimson: 0 0 60px rgba(220, 20, 60, 0.25);
+  --shadow-blue: 0 0 60px rgba(0, 56, 147, 0.25);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(220, 20, 60, 0.15);
+  --shadow-glow: 0 0 40px rgba(220, 20, 60, 0.3);
+  --shadow-button: 0 4px 20px rgba(220, 20, 60, 0.4);
+  --shadow-button-hover: 0 8px 30px rgba(220, 20, 60, 0.5);
+
+  /* ===== Typography ===== */
+  /* Mukta for Nepali, Inter for English */
+  --font-primary: 'Mukta', 'Noto Sans Devanagari', var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-english: var(--font-inter), 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-main: var(--font-primary);
+
+  /* ===== Spacing ===== */
+  --container-padding: 1.5rem;
+  --section-gap: 5rem;
+  
+  /* ===== Focus States (WCAG AAA) ===== */
+  --focus-ring: 0 0 0 3px var(--nepal-blue);
+  --focus-ring-offset: 2px;
+
+  /* ===== Animation Timing ===== */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ===== Global Reset & Base Styles ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-main);
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+
+  /* Nepal mesh gradient background */
+  background-image: var(--gradient-mesh);
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+/* Subtle Dhaka-inspired geometric pattern - very low opacity */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23DC143C' stroke-width='0.5' opacity='0.06'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z'/%3E%3Cpath d='M30 10L50 30L30 50L10 30Z'/%3E%3Cpath d='M30 20L40 30L30 40L20 30Z'/%3E%3Cline x1='0' y1='0' x2='60' y2='60'/%3E%3Cline x1='60' y1='0' x2='0' y2='60'/%3E%3Cline x1='30' y1='0' x2='30' y2='60'/%3E%3Cline x1='0' y1='30' x2='60' y2='30'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Animated mesh gradient overlay for extra depth */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 30%, rgba(220, 20, 60, 0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 70%, rgba(0, 56, 147, 0.06) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: -1;
+  animation: meshFloat 20s ease-in-out infinite;
+}
+
+@keyframes meshFloat {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* ===== Selection Styling ===== */
+::selection {
+  background: var(--nepal-crimson);
+  color: var(--nepal-white);
+}
+
+/* ===== Focus States (WCAG AAA) ===== */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ===== Splash / Loading Screen ===== */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg-darker);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+}
+
+.splash-fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Subtle crimson + blue ambient glows */
+.splash-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+}
+
+.splash-glow-1 {
+  width: 500px;
+  height: 500px;
+  background: rgba(220, 20, 60, 0.12);
+  top: -120px;
+  left: -80px;
+  animation: splashGlow 4s ease-in-out infinite;
+}
+
+.splash-glow-2 {
+  width: 400px;
+  height: 400px;
+  background: rgba(0, 56, 147, 0.1);
+  bottom: -100px;
+  right: -60px;
+  animation: splashGlow 4s ease-in-out infinite 2s;
+}
+
+@keyframes splashGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+.splash-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  z-index: 1;
+}
+
+.splash-logo {
+  width: 180px;
+  height: 180px;
+  position: relative;
+  animation: splashLogoIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: scale(0.7);
+}
+
+@keyframes splashLogoIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.splash-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 40px rgba(220, 20, 60, 0.35));
+  animation: splashSpin 2.5s linear infinite;
+}
+
+@keyframes splashSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Subtle pulsing ring around logo */
+.splash-logo::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 1px solid rgba(220, 20, 60, 0.2);
+  animation: splashRing 2s ease-in-out infinite;
+}
+
+@keyframes splashRing {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.06); opacity: 0.15; }
+}
+
+.splash-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  animation: splashBrandIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+@keyframes splashBrandIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.splash-brand-text {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--nepal-white) 0%, var(--nepal-crimson-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.splash-tagline {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+/* Loading bar */
+.splash-loader {
+  width: 200px;
+  z-index: 1;
+  animation: splashBrandIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  opacity: 0;
+}
+
+.splash-loader-bar {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.splash-loader-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--nepal-crimson), var(--nepal-gold), var(--nepal-blue));
+  border-radius: 100px;
+  animation: splashLoad 2s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+}
+
+@keyframes splashLoad {
+  to { width: 100%; }
+}
+
+/* ===== Main Container ===== */
+.main-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Navbar - Dark Blue Foundation ===== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, rgba(26, 32, 44, 0.75) 0%, rgba(0, 40, 100, 0.65) 100%);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid rgba(220, 20, 60, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Dhaka pattern overlay on navbar */
+.navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 0L18 6L12 12L6 6Z' fill='%23DC143C' fill-opacity='0.04'/%3E%3Cpath d='M0 12L6 18L0 24' fill='%23DC143C' fill-opacity='0.03'/%3E%3Cpath d='M24 12L18 18L24 24' fill='%23DC143C' fill-opacity='0.03'/%3E%3C/svg%3E");
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.7;
+}
+
+.navbar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem var(--container-padding);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+}
+
+.navbar-brand:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.navbar-brand:focus-visible {
+  outline: 3px solid var(--nepal-white);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.logo-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.logo-img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 12px rgba(220, 20, 60, 0.35));
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--nepal-white) 0%, var(--nepal-crimson-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.01em;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.solana-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass);
+  border-radius: 100px;
+  font-size: 0.875rem;
+  color: var(--nepal-white);
+  transition: var(--transition-normal);
+}
+
+.solana-badge:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.solana-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Nepal Badge - Pride element */
+.nepal-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(0, 56, 147, 0.15) 100%);
+  border: 1px solid rgba(220, 20, 60, 0.3);
+  border-radius: 100px;
+  font-size: 0.875rem;
+  color: var(--nepal-white);
+  font-weight: 500;
+  transition: var(--transition-normal);
+}
+
+.nepal-badge:hover {
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.25) 0%, rgba(0, 56, 147, 0.25) 100%);
+  border-color: var(--nepal-crimson);
+  transform: scale(1.02);
+}
+
+.nepal-flag {
+  font-size: 1.2rem;
+}
+
+/* Wallet Button Override - Crimson CTA Style */
+.wallet-button {
+  background: var(--nepal-crimson) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  transition: var(--transition-normal) !important;
+  box-shadow: var(--shadow-button) !important;
+  color: var(--nepal-white) !important;
+}
+
+.wallet-button:hover {
+  background: var(--nepal-crimson-light) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-button-hover) !important;
+}
+
+.wallet-button:focus-visible {
+  outline: 3px solid var(--nepal-white) !important;
+  outline-offset: 2px !important;
+}
+
+/* Language Toggle */
+.language-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.875rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass);
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  color: var(--nepal-white);
+}
+
+.language-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.lang-option {
+  transition: var(--transition-fast);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+}
+
+.lang-option.active {
+  color: var(--nepal-white);
+  font-weight: 700;
+  background: rgba(220, 20, 60, 0.3);
+}
+
+.lang-divider {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* ===== Hero Section - Nepal Pride ===== */
+.hero-section {
+  position: relative;
+  padding: 10rem var(--container-padding) 6rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Crimson and Blue pulsing glows */
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  animation: heroGlowPulse 8s ease-in-out infinite;
+}
+
+.hero-glow-1 {
+  width: 700px;
+  height: 700px;
+  background: var(--nepal-crimson-glow);
+  top: -250px;
+  left: 5%;
+}
+
+.hero-glow-2 {
+  width: 600px;
+  height: 600px;
+  background: var(--nepal-blue-glow);
+  bottom: -200px;
+  right: 10%;
+  animation-delay: 4s;
+}
+
+/* Additional subtle glow for depth */
+.hero-glow-3 {
+  width: 400px;
+  height: 400px;
+  background: rgba(247, 179, 43, 0.15);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 2s;
+}
+
+@keyframes heroGlowPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.15);
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-logo-mark {
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 2rem;
+  filter: drop-shadow(0 0 50px rgba(220, 20, 60, 0.3));
+  animation: fadeInScale 1s ease-out;
+}
+
+.hero-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  animation: heroSpin 12s linear infinite;
+}
+
+@keyframes heroSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(0, 56, 147, 0.15) 100%);
+  border: 1px solid rgba(220, 20, 60, 0.3);
+  border-radius: 100px;
+  font-size: 0.875rem;
+  color: var(--nepal-white);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--nepal-success);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+  box-shadow: 0 0 10px var(--nepal-success);
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--nepal-white) 0%, var(--nepal-crimson-light) 50%, var(--nepal-blue-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(180deg, transparent 0%, var(--nepal-crimson) 50%, transparent 100%);
+}
+
+/* Trust Signals */
+.trust-signals {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--border-glass);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: var(--transition-normal);
+  backdrop-filter: blur(10px);
+}
+
+.trust-item:hover {
+  background: rgba(220, 20, 60, 0.1);
+  border-color: var(--border-accent);
+  color: var(--text-primary);
+}
+
+.trust-icon {
+  font-size: 1rem;
+}
+
+/* ===== Campaigns Section ===== */
+.campaigns-section {
+  padding: 2rem var(--container-padding) var(--section-gap);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.title-icon {
+  font-size: 1.5rem;
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Category Filter - Nepal themed */
+.category-filter {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.filter-btn {
+  padding: 0.625rem 1.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--border-glass);
+  border-radius: 100px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  backdrop-filter: blur(10px);
+}
+
+.filter-btn:hover {
+  background: rgba(220, 20, 60, 0.1);
+  color: var(--text-primary);
+  border-color: var(--border-accent);
+}
+
+.filter-btn:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+.filter-btn.active {
+  background: var(--nepal-crimson);
+  color: var(--nepal-white);
+  border-color: transparent;
+  box-shadow: var(--shadow-button);
+}
+
+/* Campaign Grid */
+.campaign-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Empty State */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* ===== Campaign Card - Glassmorphism with Nepal borders ===== */
+.campaign-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition-slow);
+  box-shadow: var(--shadow-card);
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+/* Crimson-Blue gradient border effect on hover */
+.campaign-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 0%, transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: var(--transition-normal);
+  pointer-events: none;
+}
+
+.campaign-card:hover::before {
+  background: linear-gradient(135deg, var(--nepal-crimson) 0%, var(--nepal-blue) 100%);
+  opacity: 1;
+}
+
+.campaign-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  border-color: transparent;
+  box-shadow: var(--shadow-card-hover);
+}
+
+.campaign-card:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 4px;
+}
+
+.card-image-container {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+}
+
+.card-image {
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.campaign-card:hover .card-image {
+  transform: scale(1.12);
+}
+
+.card-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+      rgba(10, 14, 26, 0.95) 0%,
+      rgba(10, 14, 26, 0.4) 40%,
+      transparent 70%);
+  transition: var(--transition-normal);
+}
+
+.card-glow-effect {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: var(--transition-normal);
+  pointer-events: none;
+}
+
+.campaign-card:hover .card-glow-effect {
+  opacity: 0.3;
+}
+
+/* Category Badge */
+.category-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  z-index: 2;
+}
+
+/* Status Badge - Nepal themed */
+.status-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.875rem;
+  background: rgba(0, 40, 100, 0.8);
+  backdrop-filter: blur(12px);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.status-badge.urgent {
+  background: rgba(220, 20, 60, 0.9);
+  border-color: rgba(220, 20, 60, 0.5);
+  animation: urgentPulse 2s ease-in-out infinite;
+}
+
+.status-badge.ended {
+  background: rgba(107, 114, 128, 0.9);
+  border-color: rgba(107, 114, 128, 0.5);
+}
+
+.status-badge.funded {
+  background: linear-gradient(135deg, rgba(34, 163, 93, 0.9), rgba(46, 201, 111, 0.9));
+  border-color: rgba(34, 163, 93, 0.5);
+}
+
+.status-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.status-icon.pulse {
+  animation: iconPulse 1s ease-in-out infinite;
+}
+
+@keyframes urgentPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--nepal-crimson-glow);
+  }
+  50% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Verified Badge - Nepal Success Green */
+.verified-badge {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(135deg, var(--nepal-success), var(--nepal-success-light));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(34, 163, 93, 0.4);
+  z-index: 2;
+}
+
+.verified-icon {
+  width: 14px;
+  height: 14px;
+  color: white;
+}
+
+/* Card Content */
+.card-content {
+  padding: 1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.almost-funded-badge {
+  flex-shrink: 0;
+  padding: 0.25rem 0.625rem;
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.2), rgba(247, 179, 43, 0.2));
+  border: 1px solid rgba(220, 20, 60, 0.3);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--nepal-crimson-light);
+  white-space: nowrap;
+}
+
+.card-organizer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.organizer-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+}
+
+.card-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Tags - Nepal themed */
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  padding: 0.25rem 0.625rem;
+  background: rgba(220, 20, 60, 0.1);
+  border: 1px solid rgba(220, 20, 60, 0.2);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--nepal-crimson-light);
+  transition: var(--transition-fast);
+}
+
+.campaign-card:hover .tag {
+  background: rgba(220, 20, 60, 0.15);
+  border-color: rgba(220, 20, 60, 0.3);
+}
+
+/* Progress Section - Crimson to Blue gradient */
+.progress-section {
+  margin-top: 0.5rem;
+}
+
+.progress-bar-container {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-bottom: 0.875rem;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--gradient-progress);
+  border-radius: 100px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progress-bar-fill.almost {
+  background: linear-gradient(90deg, var(--nepal-crimson), var(--nepal-gold), var(--nepal-blue));
+}
+
+.progress-bar-fill.funded {
+  background: linear-gradient(90deg, var(--nepal-success), var(--nepal-success-light));
+}
+
+.progress-bar-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.25) 50%,
+      transparent 100%);
+  animation: shimmer 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-raised,
+.progress-goal {
+  display: flex;
+  flex-direction: column;
+}
+
+.sol-amount {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.progress-raised .sol-amount {
+  color: var(--nepal-crimson-light);
+}
+
+.sol-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.progress-percent {
+  background: rgba(220, 20, 60, 0.15);
+  padding: 0.375rem 0.875rem;
+  border-radius: 100px;
+  border: 1px solid rgba(220, 20, 60, 0.2);
+  transition: var(--transition-normal);
+}
+
+.progress-percent.funded {
+  background: rgba(34, 163, 93, 0.15);
+  border-color: rgba(34, 163, 93, 0.3);
+}
+
+.progress-percent.funded .percent-value {
+  color: var(--nepal-success-light);
+}
+
+.percent-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--nepal-crimson-light);
+}
+
+/* Card Footer */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 0.5rem;
+}
+
+.card-location {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.location-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.8;
+}
+
+.card-beneficiaries {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.beneficiaries-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.8;
+}
+
+/* Donate CTA Button - Crimson action color */
+.card-donate-btn {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  margin-top: 0.75rem;
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(0, 56, 147, 0.15) 100%);
+  border: 1px solid rgba(220, 20, 60, 0.3);
+  border-radius: 14px;
+  color: var(--nepal-crimson-light);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: var(--transition-normal);
+}
+
+.card-donate-btn:hover {
+  background: var(--nepal-crimson);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-button-hover);
+}
+
+.card-donate-btn:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+.card-donate-btn .arrow-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.card-donate-btn:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+/* ===== Campaign Skeleton Loading ===== */
+.campaign-skeleton {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 200px;
+  background: var(--bg-card);
+}
+
+.skeleton-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeleton-title {
+  height: 24px;
+  width: 80%;
+  background: var(--bg-card);
+  border-radius: 8px;
+}
+
+.skeleton-text {
+  height: 14px;
+  width: 100%;
+  background: var(--bg-card);
+  border-radius: 6px;
+}
+
+.skeleton-text.skeleton-short {
+  width: 40%;
+}
+
+.skeleton-text.skeleton-medium {
+  width: 70%;
+}
+
+.skeleton-progress {
+  margin-top: 0.5rem;
+}
+
+.skeleton-progress-bar {
+  height: 8px;
+  width: 100%;
+  background: var(--bg-card);
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-progress-stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.skeleton-stat {
+  height: 16px;
+  width: 60px;
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+
+.skeleton-footer {
+  margin-top: 0.5rem;
+}
+
+.skeleton-button {
+  height: 44px;
+  width: 100%;
+  background: var(--bg-card);
+  border-radius: 12px;
+  margin-top: 0.5rem;
+}
+
+/* Shimmer animation for skeletons */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(220, 20, 60, 0.05) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+/* ===== Campaign Detail Section ===== */
+.detail-section {
+  padding: 8rem var(--container-padding) var(--section-gap);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.back-button:hover {
+  background: rgba(220, 20, 60, 0.1);
+  color: var(--text-primary);
+  border-color: var(--border-accent);
+}
+
+.back-button:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+.back-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.detail-container {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 3rem;
+}
+
+@media (max-width: 1024px) {
+  .detail-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.detail-image-container {
+  position: relative;
+  height: 400px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.detail-image {
+  object-fit: cover;
+}
+
+.detail-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 14, 26, 0.5) 0%, transparent 40%);
+}
+
+.detail-info {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.detail-category {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.detail-category.category-humanitarian {
+  background: var(--nepal-crimson);
+  color: white;
+}
+
+.detail-category.category-education {
+  background: var(--nepal-blue);
+  color: white;
+}
+
+.detail-category.category-environment {
+  background: var(--nepal-success);
+  color: white;
+}
+
+.detail-category.category-healthcare {
+  background: linear-gradient(135deg, var(--nepal-crimson), var(--nepal-blue));
+  color: white;
+}
+
+.detail-category.category-technology {
+  background: var(--nepal-blue-light);
+  color: white;
+}
+
+.detail-category.category-animal-welfare {
+  background: var(--nepal-gold);
+  color: var(--bg-dark);
+}
+
+.detail-title {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.meta-item svg {
+  width: 18px;
+  height: 18px;
+  color: var(--nepal-crimson-light);
+}
+
+.detail-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.detail-progress {
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.1) 0%, rgba(0, 56, 147, 0.1) 100%);
+  border: 1px solid rgba(220, 20, 60, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.progress-raised-text,
+.progress-goal-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.raised-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--nepal-crimson-light);
+}
+
+.goal-amount {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.progress-bar-large {
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.progress-fill-large {
+  height: 100%;
+  background: var(--gradient-progress);
+  border-radius: 100px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-percent-text {
+  font-size: 0.875rem;
+  color: var(--nepal-success);
+  font-weight: 600;
+}
+
+/* ===== Donate Card - Nepal Crimson CTA ===== */
+.detail-right {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+}
+
+.donate-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: var(--shadow-crimson);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle Nepal flag pattern in donate card */
+.donate-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200' opacity='0.03'%3E%3Cpolygon fill='%23DC143C' points='0,0 100,60 0,120'/%3E%3Cpolygon fill='%23DC143C' points='0,80 100,140 0,200'/%3E%3C/svg%3E");
+  background-size: contain;
+  pointer-events: none;
+}
+
+.donate-section {
+  margin-bottom: 2rem;
+}
+
+.donate-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.quick-amounts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.quick-amount-btn {
+  padding: 0.75rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
+
+.quick-amount-btn:hover {
+  background: rgba(220, 20, 60, 0.1);
+  border-color: var(--border-accent);
+  color: var(--text-primary);
+}
+
+.quick-amount-btn:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+.quick-amount-btn.active {
+  background: rgba(220, 20, 60, 0.2);
+  border-color: var(--nepal-crimson);
+  color: var(--nepal-crimson-light);
+}
+
+.amount-input-container {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.amount-input {
+  width: 100%;
+  padding: 1rem 4rem 1rem 1.25rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: var(--transition-normal);
+}
+
+.amount-input:focus {
+  outline: none;
+  border-color: var(--nepal-crimson);
+  box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.2);
+}
+
+.amount-input::placeholder {
+  color: var(--text-muted);
+}
+
+.sol-suffix {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+/* Main Donate Button - Crimson CTA with glow */
+.donate-button {
+  width: 100%;
+  padding: 1rem;
+  background: var(--nepal-crimson);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  box-shadow: var(--shadow-button);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pulsing glow effect during hover */
+.donate-button::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: var(--nepal-crimson);
+  border-radius: 16px;
+  z-index: -1;
+  opacity: 0;
+  filter: blur(15px);
+  transition: var(--transition-normal);
+}
+
+.donate-button:hover:not(:disabled)::before {
+  opacity: 0.6;
+}
+
+.donate-button:hover:not(:disabled) {
+  background: var(--nepal-crimson-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-button-hover);
+}
+
+.donate-button:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+.donate-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Processing state - pulsing crimson glow */
+.donate-button.loading {
+  background: var(--nepal-blue);
+  animation: processingPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes processingPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--nepal-crimson-glow);
+  }
+  50% {
+    box-shadow: 0 0 40px var(--nepal-crimson-glow), 0 0 60px rgba(220, 20, 60, 0.2);
+  }
+}
+
+.donate-content,
+.loading-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.heart-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.wallet-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.info-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Trust Badges - Blue peace foundation */
+.trust-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(34, 163, 93, 0.1);
+  border: 1px solid rgba(34, 163, 93, 0.2);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  color: var(--nepal-success);
+}
+
+.trust-badge svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Wallet Address */
+.wallet-address-section {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.wallet-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.wallet-address {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+}
+
+.wallet-address code {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: var(--transition-fast);
+}
+
+.copy-btn:hover {
+  color: var(--nepal-crimson-light);
+}
+
+.copy-btn:focus-visible {
+  outline: 2px solid var(--nepal-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.copy-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===== Mission Section - Nepal Pride ===== */
+.mission-section {
+  position: relative;
+  padding: 6rem var(--container-padding);
+  overflow: hidden;
+}
+
+.mission-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mission-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.3;
+}
+
+.mission-glow-1 {
+  width: 500px;
+  height: 500px;
+  background: var(--nepal-crimson-glow);
+  top: -150px;
+  right: -100px;
+}
+
+.mission-glow-2 {
+  width: 500px;
+  height: 500px;
+  background: var(--nepal-blue-glow);
+  bottom: -150px;
+  left: -100px;
+}
+
+.mission-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.mission-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 4rem;
+}
+
+.mission-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(0, 56, 147, 0.15) 100%);
+  border: 1px solid rgba(220, 20, 60, 0.3);
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--nepal-white);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.25rem;
+}
+
+.mission-title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.mission-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.mission-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .mission-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .mission-card-featured {
+    order: -1;
+  }
+}
+
+.mission-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: var(--transition-normal);
+  backdrop-filter: blur(10px);
+}
+
+.mission-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-accent);
+}
+
+/* Featured card with Nepal gradient */
+.mission-card-featured {
+  background: var(--gradient-primary);
+  border: none;
+  transform: scale(1.02);
+}
+
+.mission-card-featured:hover {
+  transform: scale(1.02) translateY(-4px);
+}
+
+.mission-card-featured .mission-card-title,
+.mission-card-featured .mission-card-text {
+  color: white;
+}
+
+.mission-card-featured .mission-card-text strong {
+  color: white;
+}
+
+.mission-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+.mission-card:hover .mission-card-icon {
+  transform: scale(1.1);
+}
+
+.mission-card-icon-problem {
+  background: rgba(220, 20, 60, 0.15);
+}
+
+.mission-card-icon-solution {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.mission-card-icon-impact {
+  background: rgba(34, 163, 93, 0.15);
+}
+
+.mission-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.mission-card-text {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.mission-card-text strong {
+  color: var(--text-primary);
+}
+
+.highlight-red {
+  color: var(--nepal-crimson-light);
+  font-weight: 700;
+}
+
+.highlight-primary {
+  color: white;
+  font-weight: 700;
+}
+
+/* ===== How It Works Section ===== */
+.how-it-works-section {
+  padding: 5rem var(--container-padding);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.how-it-works-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.how-it-works-header h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.how-it-works-header p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  position: relative;
+}
+
+/* Connecting line between steps */
+.steps-grid::before {
+  content: '';
+  position: absolute;
+  top: 48px;
+  left: calc(16.67% + 1rem);
+  right: calc(16.67% + 1rem);
+  height: 2px;
+  background: linear-gradient(90deg, var(--nepal-crimson), var(--nepal-gold), var(--nepal-blue));
+  opacity: 0.3;
+  z-index: 0;
+}
+
+@media (max-width: 768px) {
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .steps-grid::before {
+    display: none;
+  }
+}
+
+.step-card {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.step-number {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  position: relative;
+  transition: var(--transition-normal);
+}
+
+.step-card:hover .step-number {
+  transform: scale(1.08);
+}
+
+/* Outer ring glow */
+.step-number::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  opacity: 0.4;
+  filter: blur(12px);
+  z-index: -1;
+}
+
+.step-number-1 {
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15), rgba(220, 20, 60, 0.05));
+  border: 2px solid rgba(220, 20, 60, 0.3);
+}
+.step-number-1::before {
+  background: var(--nepal-crimson);
+}
+
+.step-number-2 {
+  background: linear-gradient(135deg, rgba(247, 179, 43, 0.15), rgba(247, 179, 43, 0.05));
+  border: 2px solid rgba(247, 179, 43, 0.3);
+}
+.step-number-2::before {
+  background: var(--nepal-gold);
+}
+
+.step-number-3 {
+  background: linear-gradient(135deg, rgba(0, 56, 147, 0.15), rgba(0, 56, 147, 0.05));
+  border: 2px solid rgba(0, 56, 147, 0.3);
+}
+.step-number-3::before {
+  background: var(--nepal-blue);
+}
+
+.step-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.step-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.step-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+/* ===== Features Section ===== */
+.features-section {
+  padding: 0 var(--container-padding) var(--section-gap);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  transition: var(--transition-normal);
+  backdrop-filter: blur(10px);
+}
+
+.feature-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-4px);
+}
+
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.25rem;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon svg {
+  width: 28px;
+  height: 28px;
+  color: white;
+}
+
+/* Nepal-themed feature icons */
+.feature-icon-1 {
+  background: linear-gradient(135deg, var(--nepal-crimson), var(--nepal-crimson-light));
+}
+
+.feature-icon-2 {
+  background: linear-gradient(135deg, var(--nepal-blue), var(--nepal-blue-light));
+}
+
+.feature-icon-3 {
+  background: linear-gradient(135deg, var(--nepal-success), var(--nepal-success-light));
+}
+
+.feature-icon-4 {
+  background: linear-gradient(135deg, var(--nepal-gold), var(--nepal-gold-light));
+}
+
+.feature-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== Footer - Dark Blue Foundation ===== */
+.footer {
+  margin-top: auto;
+  position: relative;
+  background: linear-gradient(135deg, rgba(26, 32, 44, 0.85) 0%, rgba(0, 40, 100, 0.7) 100%);
+  border-top: 1px solid rgba(220, 20, 60, 0.08);
+  padding: 4rem var(--container-padding) 2rem;
+  backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Dhaka pattern overlay on footer */
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 0L18 6L12 12L6 6Z' fill='%23DC143C' fill-opacity='0.04'/%3E%3Cpath d='M0 12L6 18L0 24' fill='%23DC143C' fill-opacity='0.03'/%3E%3Cpath d='M24 12L18 18L24 24' fill='%23DC143C' fill-opacity='0.03'/%3E%3C/svg%3E");
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.7;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 2fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.footer-brand {
+  max-width: 300px;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.footer-logo-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 10px rgba(220, 20, 60, 0.3));
+}
+
+.footer-logo span {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer-brand p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 480px) {
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer-column h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.footer-column a {
+  display: block;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.375rem 0;
+  transition: var(--transition-fast);
+}
+
+.footer-column a:hover {
+  color: var(--nepal-crimson-light);
+}
+
+.footer-column a:focus-visible {
+  outline: 2px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-bottom p {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.network-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.network-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--nepal-success);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+  box-shadow: 0 0 10px var(--nepal-success);
+}
+
+/* ===== Toast Styles ===== */
+.toast-success-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.toast-link {
+  color: var(--nepal-crimson-light);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.toast-link:hover {
+  text-decoration: underline;
+}
+
+/* ===== Hero Actions ===== */
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+.action-btn {
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  border: none;
+}
+
+/* Primary CTA - Crimson action */
+.action-btn.primary {
+  background: var(--nepal-crimson);
+  color: white;
+  box-shadow: var(--shadow-button);
+}
+
+.action-btn.primary:hover {
+  background: var(--nepal-crimson-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-button-hover);
+}
+
+.action-btn.primary:focus-visible {
+  outline: 3px solid var(--nepal-white);
+  outline-offset: 2px;
+}
+
+/* Secondary CTA - White outline on gradient */
+.action-btn.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+}
+
+.action-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.action-btn.secondary:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+/* ===== Fundraiser Form - Nepal themed ===== */
+.form-section {
+  padding: 4rem 1rem;
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 800px;
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(20px);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.form-header h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-header p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.fundraiser-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.form-group.half {
+  flex: 1;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 1rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition-normal);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--nepal-crimson);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 4px rgba(220, 20, 60, 0.1);
+}
+
+/* Form Input Error States */
+.form-group input.input-error,
+.form-group textarea.input-error {
+  border-color: var(--nepal-crimson);
+  background: rgba(220, 20, 60, 0.05);
+}
+
+.form-group input.input-error:focus,
+.form-group textarea.input-error:focus {
+  border-color: var(--nepal-crimson);
+  box-shadow: 0 0 0 4px rgba(220, 20, 60, 0.15);
+}
+
+.error-message {
+  display: block;
+  color: var(--nepal-crimson-light);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hint-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+
+/* Button spinner */
+.btn-primary .spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+  margin-right: 0.5rem;
+}
+
+.wallet-input-container {
+  position: relative;
+}
+
+.wallet-input-container input {
+  padding-right: 3rem;
+  width: 100%;
+}
+
+.font-mono {
+  font-family: monospace;
+}
+
+.input-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.input-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.add-link-btn {
+  background: none;
+  border: none;
+  color: var(--nepal-crimson-light);
+  font-weight: 500;
+  cursor: pointer;
+  align-self: flex-start;
+  padding: 0;
+  margin-top: 0.5rem;
+  transition: var(--transition-fast);
+}
+
+.add-link-btn:hover {
+  text-decoration: underline;
+  color: var(--nepal-crimson);
+}
+
+.map-placeholder {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: crosshair;
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.map-placeholder:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--nepal-crimson);
+}
+
+.map-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.map-container {
+  width: 100%;
+  height: 300px;
+  min-height: 200px;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  position: relative;
+  z-index: 0;
+  cursor: crosshair;
+}
+
+/* keep Leaflet controls above tiles but below modals */
+.map-container .leaflet-control-container {
+  z-index: 10;
+}
+
+/* prevent Leaflet's own z-index from bleeding through the form */
+.map-container .leaflet-pane {
+  z-index: 1;
+}
+.map-container .leaflet-tile-pane {
+  z-index: 1;
+}
+.map-container .leaflet-overlay-pane {
+  z-index: 2;
+}
+.map-container .leaflet-marker-pane {
+  z-index: 3;
+}
+
+@media (max-width: 640px) {
+  .map-container {
+    height: 220px;
+  }
+}
+
+.map-coords-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.map-coords-row input {
+  flex: 1;
+}
+
+.map-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.map-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.map-pin {
+  font-size: 2rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  position: relative;
+  z-index: 10;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border-color: var(--border-glass);
+}
+
+.btn-secondary:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--nepal-crimson);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-button);
+  transition: var(--transition-normal);
+}
+
+.btn-primary:hover {
+  background: var(--nepal-crimson-light);
+  box-shadow: var(--shadow-button-hover);
+  transform: translateY(-2px);
+}
+
+.btn-primary:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  :root {
+    --container-padding: 1rem;
+    --section-gap: 4rem;
+  }
+
+  .hero-title {
+    font-size: 2.25rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-stats {
+    gap: 1.5rem;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+  }
+
+  .stat-divider {
+    display: none;
+  }
+
+  .campaign-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-amounts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .navbar-right {
+    gap: 0.5rem;
+  }
+
+  .solana-badge {
+    display: none;
+  }
+
+  .nepal-badge span:not(.nepal-flag) {
+    display: none;
+  }
+
+  .language-toggle {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.8rem;
+  }
+
+  /* Form Responsive */
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-container {
+    padding: 1.5rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .action-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Simplified gradients for mobile (performance) */
+@media (max-width: 768px) {
+  body::after {
+    display: none;
+  }
+  
+  .hero-glow-3 {
+    display: none;
+  }
+}
+
+/* Tablet - balanced middle ground */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero-glow {
+    filter: blur(100px);
+  }
+  
+  body::after {
+    opacity: 0.5;
+  }
+}
+
+/* ===== Error Boundary - Nepal themed ===== */
+.error-boundary {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--bg-dark);
+}
+
+.error-content {
+  text-align: center;
+  max-width: 500px;
+  padding: 3rem;
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.error-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: rgba(220, 20, 60, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nepal-crimson);
+}
+
+.error-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.error-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.error-message {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.error-details {
+  text-align: left;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.error-details summary {
+  cursor: pointer;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.error-details pre {
+  color: var(--nepal-crimson);
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+}
+
+.error-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.error-btn {
+  padding: 0.875rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  border: none;
+}
+
+.error-btn.primary {
+  background: var(--nepal-crimson);
+  color: white;
+}
+
+.error-btn.primary:hover {
+  background: var(--nepal-crimson-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-button);
+}
+
+.error-btn.primary:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+.error-btn.secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.error-btn.secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+}
+
+.error-btn.secondary:focus-visible {
+  outline: 3px solid var(--nepal-blue);
+  outline-offset: 2px;
+}
+
+/* ===== Skip Navigation Link (Accessibility) ===== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--nepal-blue);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  z-index: 9999;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ===== Success Animation - Rhododendron Bloom ===== */
+@keyframes rhodoBloom {
+  0% {
+    transform: scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes peaceRays {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+}
+
+.success-animation {
+  animation: rhodoBloom 0.6s ease-out forwards;
+}
+
+.success-rays {
+  animation: peaceRays 1s ease-out forwards;
+}
+
+/* ===== Parallax Effect for Desktop ===== */
+@media (min-width: 1025px) {
+  .hero-background {
+    will-change: transform;
+  }
+  
+  .hero-glow {
+    transition: transform 0.1s linear;
+  }
+}
+
+/* ===== Web3 Transaction States ===== */
+.tx-processing {
+  position: relative;
+}
+
+.tx-processing::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: var(--nepal-crimson);
+  z-index: -1;
+  opacity: 0;
+  filter: blur(20px);
+  animation: txPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes txPulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* ===== Blockchain Badge - Nepal + Solana combo ===== */
+.blockchain-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.1) 0%, rgba(0, 56, 147, 0.1) 100%);
+  border: 1px solid rgba(220, 20, 60, 0.2);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.blockchain-badge .nepal-mini {
+  font-size: 0.875rem;
+}
+
+.blockchain-badge .solana-mini {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===== Diya Lamp Icon for Hope States ===== */
+.hope-icon {
+  color: var(--nepal-gold);
+  filter: drop-shadow(0 0 8px var(--nepal-gold));
+  animation: diyaFlicker 2s ease-in-out infinite;
+}
+
+@keyframes diyaFlicker {
+  0%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px var(--nepal-gold));
+  }
+  50% {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 12px var(--nepal-gold));
+  }
+}
+
+/* ===== Cultural Geometric Pattern Decoration (Dhaka Topi inspired) ===== */
+.nepal-pattern {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' opacity='1'%3E%3Cpath stroke='%23DC143C' stroke-width='0.5' d='M0 40L40 0L80 40L40 80Z'/%3E%3Cpath stroke='%23003893' stroke-width='0.5' d='M20 40L40 20L60 40L40 60Z'/%3E%3Ccircle cx='40' cy='40' r='8' stroke='%23DC143C' stroke-width='0.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 80px 80px;
 }
