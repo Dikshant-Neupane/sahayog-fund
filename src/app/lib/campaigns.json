@@ -5,7 +5,7 @@
         "description": "Help us provide clean drinking water to over 500 families in remote villages of Nepal. Your donation will fund water filtration systems and well construction, ensuring safe water access for generations to come.",
         "goal": 50,
         "raised": 32.5,
-        "image": "https://images.unsplash.com/photo-1541544537156-7627a7a4aa1c?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1614209466870-66318b9b2d5f?w=800&h=600&fit=crop",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "category": "Humanitarian",
         "endDate": "2026-04-15",
@@ -13,11 +13,10 @@
         "location": "Dolakha, Nepal",
         "beneficiaries": 500,
         "verified": true,
-        "tags": [
-            "water",
-            "humanitarian",
-            "nepal"
-        ]
+        "tags": ["water", "humanitarian", "nepal"],
+        "representativeName": "Ramesh Adhikari",
+        "representativeRole": "Executive Director",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/32.jpg"
     },
     {
         "id": "campaign-002",
@@ -25,7 +24,7 @@
         "description": "Support our mission to provide quality education to children who cannot afford school fees. Funds will cover tuition, books, uniforms, and daily meals for 100 students for an entire academic year.",
         "goal": 75,
         "raised": 45.2,
-        "image": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1759143103540-78298031a86a?w=800&h=600&fit=crop",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "category": "Education",
         "endDate": "2026-05-20",
@@ -33,31 +32,29 @@
         "location": "Kathmandu, Nepal",
         "beneficiaries": 100,
         "verified": true,
-        "tags": [
-            "education",
-            "children",
-            "scholarship"
-        ]
+        "tags": ["education", "children", "scholarship"],
+        "representativeName": "Sita Sharma",
+        "representativeRole": "Program Coordinator",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/44.jpg"
     },
     {
         "id": "campaign-003",
-        "title": "Reforestation Project - Amazon",
-        "description": "Join our fight against deforestation. We're planting 10,000 native trees in the Amazon rainforest to restore wildlife habitats and combat climate change. Every SOL plants 5 trees!",
+        "title": "Reforestation Project - Terai",
+        "description": "Join our fight against deforestation in the Terai region. We're planting 10,000 native Sal trees to restore wildlife habitats and combat climate change. Every SOL plants 50 trees!",
         "goal": 100,
         "raised": 67.8,
-        "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1642043259052-83359dce8a10?w=800&h=600&fit=crop",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "category": "Environment",
         "endDate": "2026-06-30",
-        "organizer": "Green Earth Alliance",
-        "location": "Manaus, Brazil",
+        "organizer": "Green Earth Nepal",
+        "location": "Chitwan, Nepal",
         "beneficiaries": 10000,
         "verified": true,
-        "tags": [
-            "environment",
-            "trees",
-            "climate"
-        ]
+        "tags": ["environment", "trees", "climate"],
+        "representativeName": "Bikram Thapa",
+        "representativeRole": "Founder & CEO",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/45.jpg"
     },
     {
         "id": "campaign-004",
@@ -65,7 +62,7 @@
         "description": "Provide emergency medical supplies and healthcare services to communities affected by natural disasters. Your contribution helps save lives and rebuild health infrastructure.",
         "goal": 120,
         "raised": 89.5,
-        "image": "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1674788325730-25f58337b918?w=800&h=600&fit=crop",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "category": "Healthcare",
         "endDate": "2026-03-25",
@@ -73,11 +70,10 @@
         "location": "Multiple Locations",
         "beneficiaries": 5000,
         "verified": true,
-        "tags": [
-            "health",
-            "emergency",
-            "medical"
-        ]
+        "tags": ["health", "emergency", "medical"],
+        "representativeName": "Dr. Anita Gurung",
+        "representativeRole": "Medical Director",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/28.jpg"
     },
     {
         "id": "campaign-005",
@@ -85,7 +81,7 @@
         "description": "Fund the development of free, open-source tools for the Solana ecosystem. Help us build developer resources, SDKs, and educational content to grow the Web3 community.",
         "goal": 200,
         "raised": 156.3,
-        "image": "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1526712318848-5f38e2740d44?w=800&h=600&fit=crop",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "category": "Technology",
         "endDate": "2026-08-10",
@@ -93,11 +89,10 @@
         "location": "Global",
         "beneficiaries": 50000,
         "verified": true,
-        "tags": [
-            "technology",
-            "blockchain",
-            "opensource"
-        ]
+        "tags": ["technology", "blockchain", "opensource"],
+        "representativeName": "Kiran Poudel",
+        "representativeRole": "Lead Developer",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/22.jpg"
     },
     {
         "id": "campaign-006",
@@ -105,7 +100,7 @@
         "description": "Help us expand our shelter to rescue and care for more abandoned animals. Funds will build new kennels, veterinary facilities, and provide food and medical care for 200+ animals.",
         "goal": 40,
         "raised": 28.7,
-        "image": "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1573729230078-fdf54ee54241?w=800&h=600&fit=crop",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "category": "Animal Welfare",
         "endDate": "2026-04-30",
@@ -113,11 +108,10 @@
         "location": "Austin, Texas",
         "beneficiaries": 200,
         "verified": true,
-        "tags": [
-            "animals",
-            "rescue",
-            "shelter"
-        ]
+        "tags": ["animals", "rescue", "shelter"],
+        "representativeName": "Shreya Karki",
+        "representativeRole": "Shelter Manager",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/65.jpg"
     },
     {
         "id": "campaign-007",
@@ -126,18 +120,17 @@
         "description": "Help rebuild 5 schools destroyed in the 2023 Jajarkot earthquake. Funds will go directly to construction materials and labor.",
         "goal": 50,
         "raised": 12.5,
-        "image": "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1553886334-43d24f24d3bd?w=800&h=600&fit=crop",
         "organizer": "Nepal Education Foundation",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-06-30",
         "location": "Jajarkot, Karnali Province",
         "beneficiaries": 450,
         "verified": true,
-        "tags": [
-            "education",
-            "earthquake",
-            "children"
-        ]
+        "tags": ["education", "earthquake", "children"],
+        "representativeName": "Deepak Bhandari",
+        "representativeRole": "Project Lead",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/55.jpg"
     },
     {
         "id": "campaign-008",
@@ -146,18 +139,17 @@
         "description": "Provide reusable menstrual pads and hygiene education to 500 girls in remote Mugu district schools.",
         "goal": 15,
         "raised": 8.3,
-        "image": "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&h=600&fit=crop",
         "organizer": "Dignity Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-05-15",
         "location": "Mugu, Karnali Province",
         "beneficiaries": 500,
         "verified": true,
-        "tags": [
-            "health",
-            "women",
-            "education"
-        ]
+        "tags": ["health", "women", "education"],
+        "representativeName": "Pratima Basnet",
+        "representativeRole": "Health Program Officer",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/52.jpg"
     },
     {
         "id": "campaign-009",
@@ -166,18 +158,17 @@
         "description": "Install 10 community water wells with filtration systems in arsenic-affected villages of Bara district.",
         "goal": 75,
         "raised": 23.7,
-        "image": "https://images.unsplash.com/photo-1594398901394-4e34939a4fd0?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1571401835393-8c5f35328320?w=800&h=600&fit=crop",
         "organizer": "Water for Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-08-20",
         "location": "Bara, Madhesh Province",
         "beneficiaries": 2000,
         "verified": true,
-        "tags": [
-            "water",
-            "health",
-            "infrastructure"
-        ]
+        "tags": ["water", "health", "infrastructure"],
+        "representativeName": "Suraj Yadav",
+        "representativeRole": "Field Operations Director",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/36.jpg"
     },
     {
         "id": "campaign-010",
@@ -186,18 +177,17 @@
         "description": "Monthly cleanup drives along 5km of Bagmati River in Kathmandu. Funds for equipment, gloves, waste management.",
         "goal": 8,
         "raised": 6.2,
-        "image": "https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1762698325112-16b13f4f8732?w=800&h=600&fit=crop",
         "organizer": "Hamro Bagmati",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-04-30",
         "location": "Kathmandu Valley",
         "beneficiaries": 100000,
         "verified": true,
-        "tags": [
-            "environment",
-            "river",
-            "community"
-        ]
+        "tags": ["environment", "river", "community"],
+        "representativeName": "Manish Shrestha",
+        "representativeRole": "Campaign Organizer",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/41.jpg"
     },
     {
         "id": "campaign-011",
@@ -206,18 +196,17 @@
         "description": "Support college students facing unexpected medical emergencies. Fast disbursement, transparent tracking.",
         "goal": 20,
         "raised": 4.1,
-        "image": "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1611516491426-03025e6043c8?w=800&h=600&fit=crop",
         "organizer": "Sunway Student Union",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-12-31",
         "location": "Kathmandu, Bagmati Province",
         "beneficiaries": 50,
         "verified": true,
-        "tags": [
-            "health",
-            "students",
-            "emergency"
-        ]
+        "tags": ["health", "students", "emergency"],
+        "representativeName": "Aayush Tamang",
+        "representativeRole": "Student President",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/18.jpg"
     },
     {
         "id": "campaign-012",
@@ -226,18 +215,17 @@
         "description": "Combat deforestation and landslides by planting native species in degraded Chure region.",
         "goal": 12,
         "raised": 9.8,
-        "image": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1642043258047-4ea824c2efac?w=800&h=600&fit=crop",
         "organizer": "Green Chure Initiative",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-07-15",
         "location": "Chure Range, Multiple Districts",
         "beneficiaries": 5000,
         "verified": true,
-        "tags": [
-            "environment",
-            "trees",
-            "climate"
-        ]
+        "tags": ["environment", "trees", "climate"],
+        "representativeName": "Nirmala KC",
+        "representativeRole": "Reforestation Lead",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/33.jpg"
     },
     {
         "id": "campaign-013",
@@ -246,18 +234,17 @@
         "description": "Vaccinate and sterilize 200 street dogs in Pokhara to control rabies and population humanely.",
         "goal": 10,
         "raised": 7.5,
-        "image": "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1614209466870-66318b9b2d5f?w=800&h=600&fit=crop",
         "organizer": "Pokhara Animal Welfare Society",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-05-30",
         "location": "Pokhara, Gandaki Province",
         "beneficiaries": 200,
         "verified": true,
-        "tags": [
-            "animals",
-            "health",
-            "community"
-        ]
+        "tags": ["animals", "health", "community"],
+        "representativeName": "Dr. Rajan Lamsal",
+        "representativeRole": "Head Veterinarian",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/61.jpg"
     },
     {
         "id": "campaign-014",
@@ -266,18 +253,17 @@
         "description": "3-month web development bootcamp for 30 underprivileged youth from Dailekh. Includes laptops and internet.",
         "goal": 25,
         "raised": 11.2,
-        "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1751566477091-921125737d76?w=800&h=600&fit=crop",
         "organizer": "Code for Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-06-01",
         "location": "Dailekh, Karnali Province",
         "beneficiaries": 30,
         "verified": true,
-        "tags": [
-            "education",
-            "technology",
-            "youth"
-        ]
+        "tags": ["education", "technology", "youth"],
+        "representativeName": "Sabin Maharjan",
+        "representativeRole": "Program Director",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/29.jpg"
     },
     {
         "id": "campaign-015",
@@ -286,18 +272,17 @@
         "description": "Tailoring and handicraft training for 40 widows in Janakpur to achieve financial independence.",
         "goal": 18,
         "raised": 5.9,
-        "image": "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1642043257957-f2c915db6cc9?w=800&h=600&fit=crop",
         "organizer": "Women Rise Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-08-10",
         "location": "Janakpur, Madhesh Province",
         "beneficiaries": 40,
         "verified": true,
-        "tags": [
-            "women",
-            "empowerment",
-            "skills"
-        ]
+        "tags": ["women", "empowerment", "skills"],
+        "representativeName": "Geeta Devi Mandal",
+        "representativeRole": "Founder",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/57.jpg"
     },
     {
         "id": "campaign-016",
@@ -306,18 +291,17 @@
         "description": "Install solar-powered street lights in 3 off-grid villages in Humla district for safety and education.",
         "goal": 30,
         "raised": 14.6,
-        "image": "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1574007768454-75b5d20f6454?w=800&h=600&fit=crop",
         "organizer": "Light Up Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-07-30",
         "location": "Humla, Karnali Province",
         "beneficiaries": 800,
         "verified": true,
-        "tags": [
-            "energy",
-            "solar",
-            "infrastructure"
-        ]
+        "tags": ["energy", "solar", "infrastructure"],
+        "representativeName": "Tenzin Lama",
+        "representativeRole": "Project Engineer",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/48.jpg"
     },
     {
         "id": "campaign-017",
@@ -326,18 +310,17 @@
         "description": "Full-year scholarships for 20 Dalit students to complete high school in Bardiya district.",
         "goal": 22,
         "raised": 8.7,
-        "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1759143103540-78298031a86a?w=800&h=600&fit=crop",
         "organizer": "Equality Through Education",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-09-01",
         "location": "Bardiya, Lumbini Province",
         "beneficiaries": 20,
         "verified": true,
-        "tags": [
-            "education",
-            "equality",
-            "scholarship"
-        ]
+        "tags": ["education", "equality", "scholarship"],
+        "representativeName": "Raj Kumar Pariyar",
+        "representativeRole": "Education Officer",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/71.jpg"
     },
     {
         "id": "campaign-018",
@@ -346,18 +329,17 @@
         "description": "Quarterly health camps providing free checkups, medicines, and dental care in remote Upper Mustang villages.",
         "goal": 40,
         "raised": 19.3,
-        "image": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1553886334-43d24f24d3bd?w=800&h=600&fit=crop",
         "organizer": "Himalayan Health Initiative",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-10-15",
         "location": "Mustang, Gandaki Province",
         "beneficiaries": 1200,
         "verified": true,
-        "tags": [
-            "health",
-            "medical",
-            "remote"
-        ]
+        "tags": ["health", "medical", "remote"],
+        "representativeName": "Dr. Pema Sherpa",
+        "representativeRole": "Chief Medical Officer",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/22.jpg"
     },
     {
         "id": "campaign-019",
@@ -366,18 +348,17 @@
         "description": "Set up digital libraries with tablets and educational content in 8 government schools in Dhanusha.",
         "goal": 35,
         "raised": 16.1,
-        "image": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&h=600&fit=crop",
         "organizer": "Tech4Schools Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-08-25",
         "location": "Dhanusha, Madhesh Province",
         "beneficiaries": 1600,
         "verified": true,
-        "tags": [
-            "education",
-            "technology",
-            "digital"
-        ]
+        "tags": ["education", "technology", "digital"],
+        "representativeName": "Binod Chaudhary",
+        "representativeRole": "Technology Director",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/52.jpg"
     },
     {
         "id": "campaign-020",
@@ -386,18 +367,17 @@
         "description": "Train 50 women farmers in Kavre on organic vegetable farming and provide seed kits.",
         "goal": 14,
         "raised": 10.5,
-        "image": "https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1642043259052-83359dce8a10?w=800&h=600&fit=crop",
         "organizer": "Sustainable Agriculture Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-06-20",
         "location": "Kavre, Bagmati Province",
         "beneficiaries": 50,
         "verified": true,
-        "tags": [
-            "agriculture",
-            "women",
-            "sustainability"
-        ]
+        "tags": ["agriculture", "women", "sustainability"],
+        "representativeName": "Kamala Rijal",
+        "representativeRole": "Agriculture Specialist",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/41.jpg"
     },
     {
         "id": "campaign-021",
@@ -406,18 +386,17 @@
         "description": "Build 10 earthquake-resistant homes for families still living in temporary shelters in Sindhupalchok.",
         "goal": 100,
         "raised": 37.8,
-        "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1674788325730-25f58337b918?w=800&h=600&fit=crop",
         "organizer": "Build Back Better Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-12-15",
         "location": "Sindhupalchok, Bagmati Province",
         "beneficiaries": 50,
         "verified": true,
-        "tags": [
-            "housing",
-            "earthquake",
-            "shelter"
-        ]
+        "tags": ["housing", "earthquake", "shelter"],
+        "representativeName": "Hari Prasad Dahal",
+        "representativeRole": "Construction Manager",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/65.jpg"
     },
     {
         "id": "campaign-022",
@@ -426,18 +405,17 @@
         "description": "Conduct workshops and provide counseling sessions for 500 university students facing mental health challenges.",
         "goal": 9,
         "raised": 6.8,
-        "image": "https://images.unsplash.com/photo-1493836512294-502baa1986e2?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1762698325112-16b13f4f8732?w=800&h=600&fit=crop",
         "organizer": "Mind Matters Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-05-30",
         "location": "Kathmandu Valley",
         "beneficiaries": 500,
         "verified": true,
-        "tags": [
-            "health",
-            "mental-health",
-            "students"
-        ]
+        "tags": ["health", "mental-health", "students"],
+        "representativeName": "Sunita Pradhan",
+        "representativeRole": "Clinical Psychologist",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/36.jpg"
     },
     {
         "id": "campaign-023",
@@ -446,18 +424,17 @@
         "description": "Provide beekeeping training and equipment to 25 families in Gorkha for sustainable income generation.",
         "goal": 11,
         "raised": 4.3,
-        "image": "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1642043258047-4ea824c2efac?w=800&h=600&fit=crop",
         "organizer": "Bee Happy Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-07-10",
         "location": "Gorkha, Gandaki Province",
         "beneficiaries": 25,
         "verified": true,
-        "tags": [
-            "livelihood",
-            "agriculture",
-            "income"
-        ]
+        "tags": ["livelihood", "agriculture", "income"],
+        "representativeName": "Purna Bahadur Magar",
+        "representativeRole": "Livelihood Coordinator",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/75.jpg"
     },
     {
         "id": "campaign-024",
@@ -466,18 +443,17 @@
         "description": "Build ramps, accessible toilets, and Braille materials for 6 schools to support 80 students with disabilities.",
         "goal": 28,
         "raised": 12.9,
-        "image": "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1611516491426-03025e6043c8?w=800&h=600&fit=crop",
         "organizer": "Inclusive Education Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-09-20",
         "location": "Lalitpur, Bagmati Province",
         "beneficiaries": 80,
         "verified": true,
-        "tags": [
-            "accessibility",
-            "education",
-            "disability"
-        ]
+        "tags": ["accessibility", "education", "disability"],
+        "representativeName": "Maya Tamrakar",
+        "representativeRole": "Inclusion Specialist",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/48.jpg"
     },
     {
         "id": "campaign-025",
@@ -486,18 +462,17 @@
         "description": "Support 30 Tharu artisans in Kailali to preserve traditional crafts and access online markets.",
         "goal": 13,
         "raised": 7.1,
-        "image": "https://images.unsplash.com/photo-1528396518501-b53b655eb9b3?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1526712318848-5f38e2740d44?w=800&h=600&fit=crop",
         "organizer": "Nepal Heritage Collective",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-06-25",
         "location": "Kailali, Sudurpashchim Province",
         "beneficiaries": 30,
         "verified": true,
-        "tags": [
-            "culture",
-            "artisans",
-            "heritage"
-        ]
+        "tags": ["culture", "artisans", "heritage"],
+        "representativeName": "Dhan Bahadur Tharu",
+        "representativeRole": "Cultural Heritage Lead",
+        "representativePhoto": "https://randomuser.me/api/portraits/men/82.jpg"
     },
     {
         "id": "campaign-026",
@@ -506,17 +481,16 @@
         "description": "Micro-grants for 15 young entrepreneurs to launch small businesses in Biratnagar. Mentorship included.",
         "goal": 17,
         "raised": 9.4,
-        "image": "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=600&fit=crop",
+        "image": "https://images.unsplash.com/photo-1573729230078-fdf54ee54241?w=800&h=600&fit=crop",
         "organizer": "Youth Ventures Nepal",
         "walletAddress": "82E5o9hKmFRGwGKn1XiLWGnkPGcGmXc675P4o5Cxhs8z",
         "endDate": "2026-08-15",
         "location": "Biratnagar, Koshi Province",
         "beneficiaries": 15,
         "verified": true,
-        "tags": [
-            "business",
-            "youth",
-            "entrepreneurship"
-        ]
+        "tags": ["business", "youth", "entrepreneurship"],
+        "representativeName": "Roshni Rai",
+        "representativeRole": "Youth Program Manager",
+        "representativePhoto": "https://randomuser.me/api/portraits/women/62.jpg"
     }
 ]

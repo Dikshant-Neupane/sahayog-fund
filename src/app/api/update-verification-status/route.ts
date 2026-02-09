@@ -35,6 +35,14 @@ export async function POST(request: NextRequest) {
             updateData.verification_date = new Date().toISOString();
         }
 
+        // Fetch previous status before updating
+        const { data: existingCampaign } = await supabase
+            .from('campaigns_pending')
+            .select('verification_status')
+            .eq('id', campaignId)
+            .single();
+        const previousStatus = existingCampaign?.verification_status || 'unknown';
+
         const { data: campaign, error } = await supabase
             .from('campaigns_pending')
             .update(updateData)
@@ -81,7 +89,7 @@ export async function POST(request: NextRequest) {
             action: `update_status_${status}`,
             target_id: campaignId,
             target_type: 'campaign',
-            details: { notes, previousStatus: campaign.verification_status },
+            details: { notes, previousStatus },
         });
 
         // Send email notification

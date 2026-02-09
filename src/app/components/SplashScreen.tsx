@@ -8,7 +8,7 @@ interface SplashScreenProps {
   minDuration?: number;
 }
 
-export default function SplashScreen({ onFinished, minDuration = 2200 }: SplashScreenProps) {
+export default function SplashScreen({ onFinished, minDuration = 1000 }: SplashScreenProps) {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function SplashScreen({ onFinished, minDuration = 2200 }: SplashS
 
     const removeTimer = setTimeout(() => {
       onFinished();
-    }, minDuration + 600); // 600ms for fade-out animation
+    }, minDuration + 400); // 400ms for fade-out animation
 
     return () => {
       clearTimeout(fadeTimer);

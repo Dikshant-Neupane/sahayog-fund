@@ -1,5 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/supabase';
+import campaignsData from '@/app/lib/campaigns.json';
+
+interface StaticCampaign {
+    id: string;
+    title: string;
+    organizer: string;
+    verified: boolean;
+    category: string;
+    location: string;
+    [key: string]: unknown;
+}
 
 export async function GET(request: NextRequest) {
     try {
@@ -10,6 +21,26 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'Missing campaignId' }, { status: 400 });
         }
 
+        // First check static campaigns (campaign-001 through campaign-026)
+        const staticCampaign = (campaignsData as StaticCampaign[]).find(
+            (c) => c.id.toLowerCase() === campaignId.trim().toLowerCase()
+        );
+
+        if (staticCampaign) {
+            return NextResponse.json({
+                campaignId: staticCampaign.id,
+                organizationName: staticCampaign.organizer,
+                status: staticCampaign.verified ? 'verified' : 'pending',
+                notes: staticCampaign.verified
+                    ? `This campaign has been verified by SahayogFund. Category: ${staticCampaign.category}. Location: ${staticCampaign.location}.`
+                    : null,
+                scheduledDate: null,
+                submittedAt: '2025-01-01T00:00:00Z',
+                updatedAt: new Date().toISOString(),
+            });
+        }
+
+        // Fallback to Supabase for user-submitted campaigns
         const supabase = createServerSupabase();
 
         const { data, error } = await supabase

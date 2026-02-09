@@ -12,6 +12,12 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Missing file, campaignId, or documentType' }, { status: 400 });
         }
 
+        // Validate documentType against allowed values
+        const validDocumentTypes = ['ngo_registration', 'tax_exemption', 'representative_id', 'representative_photo'];
+        if (!validDocumentTypes.includes(documentType)) {
+            return NextResponse.json({ error: 'Invalid document type' }, { status: 400 });
+        }
+
         // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
             return NextResponse.json({ error: 'File too large. Max 5MB.' }, { status: 400 });

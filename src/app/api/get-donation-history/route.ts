@@ -6,7 +6,8 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url);
         const campaignId = searchParams.get('campaignId');
         const donorWallet = searchParams.get('donorWallet');
-        const limit = parseInt(searchParams.get('limit') || '50');
+        const rawLimit = parseInt(searchParams.get('limit') || '50', 10);
+        const limit = Number.isNaN(rawLimit) ? 50 : rawLimit;
 
         const supabase = createServerSupabase();
 

@@ -17,9 +17,11 @@ const WalletMultiButton = dynamic(
 
 interface NavbarProps {
     onLogoClick?: () => void;
+    onStartCampaignClick?: () => void;
+    onBrowseCampaignsClick?: () => void;
 }
 
-const Navbar = ({ onLogoClick }: NavbarProps) => {
+const Navbar = ({ onLogoClick, onStartCampaignClick, onBrowseCampaignsClick }: NavbarProps) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [balance, setBalance] = useState<number | null>(null);
     const { publicKey, connected, disconnect } = useWallet();
@@ -102,12 +104,12 @@ const Navbar = ({ onLogoClick }: NavbarProps) => {
         <nav className="navbar" role="navigation" aria-label="Main navigation">
             <div className="navbar-container">
                 {/* Logo */}
-                <button type="button" className="navbar-brand" onClick={handleLogoClick} aria-label="Go to homepage">
+                <Link href="/" className="navbar-brand" onClick={handleLogoClick} aria-label="Go to homepage">
                     <div className="logo-icon">
                         <Image src="/logo.png" alt="SahayogFund" width={56} height={56} className="logo-img" priority />
                     </div>
                     <span className="logo-text">SahayogFund</span>
-                </button>
+                </Link>
 
                 {/* Hamburger Button - Mobile Only */}
                 <button
@@ -125,12 +127,30 @@ const Navbar = ({ onLogoClick }: NavbarProps) => {
 
                 {/* Desktop Right Section */}
                 <div className="navbar-right navbar-desktop">
+                    <div className="hidden md:flex items-center gap-6 mr-6">
+                        <button
+                            onClick={onBrowseCampaignsClick}
+                            className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
+                        >
+                            Browse Campaigns
+                        </button>
+                        <button
+                            onClick={onStartCampaignClick}
+                            className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
+                        >
+                            Start Campaign
+                        </button>
+                        <Link href="/verify" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
+                            Verify
+                        </Link>
+                    </div>
+
                     <div className="nepal-badge" aria-label="Made for Nepal">
                         <span className="nepal-flag">🇳🇵</span>
                         <span>Nepal</span>
                     </div>
                     <LanguageToggle />
-                    <Link href="/verify" className="nav-link">Verify</Link>
+
                     <div className="solana-badge" aria-label="Powered by Solana">
                         <svg viewBox="0 0 397.7 311.7" className="solana-icon" aria-hidden="true">
                             <linearGradient id="solanaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -182,7 +202,21 @@ const Navbar = ({ onLogoClick }: NavbarProps) => {
                             </div>
                         )}
                         <div className="mobile-menu-actions">
-                            <Link href="/verify" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>🔍 Verify Campaign</Link>
+                            <button
+                                onClick={() => { onBrowseCampaignsClick && onBrowseCampaignsClick(); setMobileMenuOpen(false); }}
+                                className="mobile-nav-link text-left"
+                            >
+                                🔍 Browse Campaigns
+                            </button>
+                            <button
+                                onClick={() => { onStartCampaignClick && onStartCampaignClick(); setMobileMenuOpen(false); }}
+                                className="mobile-nav-link text-left"
+                            >
+                                🚀 Start Campaign
+                            </button>
+                            <Link href="/verify" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+                                ✅ Verify Campaign
+                            </Link>
                             <div className="nepal-badge mobile-badge"><span className="nepal-flag">🇳🇵</span><span>Nepal</span></div>
                             <LanguageToggle />
                             <div className="solana-badge mobile-badge">

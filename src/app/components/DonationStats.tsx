@@ -42,8 +42,8 @@ export function DonationStats() {
 
     if (error) {
         return (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-                <p className="text-red-600">⚠️ {error}</p>
+            <div className="rounded-xl p-4 text-center" style={{background: 'rgba(220,20,60,0.1)', border: '1px solid rgba(220,20,60,0.2)'}}>
+                <p style={{color: '#E8365A'}}>⚠️ {error}</p>
             </div>
         );
     }
@@ -51,10 +51,10 @@ export function DonationStats() {
     return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
       {/* Total Donations */}
-      <div className="bg-gradient-to-br from-[#003893] to-[#002766] rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+      <div className="rounded-xl p-6 text-white transform hover:scale-105 transition-transform duration-200" style={{background: 'linear-gradient(135deg, #003893 0%, #002766 100%)', border: '1px solid rgba(255,255,255,0.08)'}}>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-blue-100 text-sm font-medium mb-1">Total Donations</p>
+            <p className="text-sm font-medium mb-1" style={{color: 'rgba(180,198,231,0.8)'}}>Total Donations</p>
             <h3 className="text-4xl font-bold">
               {loading ? (
                 <span className="animate-pulse">--</span>
@@ -62,7 +62,7 @@ export function DonationStats() {
                 `${displayDonations.toFixed(4)} ◎`
               )}
             </h3>
-            <p className="text-blue-100 text-xs mt-1">
+            <p className="text-xs mt-1" style={{color: 'rgba(180,198,231,0.6)'}}>
               ≈ ${(displayDonations * 145).toFixed(2)} USD
             </p>
           </div>
@@ -71,10 +71,10 @@ export function DonationStats() {
       </div>
 
       {/* Total Donors */}
-      <div className="bg-gradient-to-br from-[#22A35D] to-[#1A8349] rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+      <div className="rounded-xl p-6 text-white transform hover:scale-105 transition-transform duration-200" style={{background: 'linear-gradient(135deg, #22A35D 0%, #1A8349 100%)', border: '1px solid rgba(255,255,255,0.08)'}}>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-emerald-100 text-sm font-medium mb-1">Total Donors</p>
+            <p className="text-sm font-medium mb-1" style={{color: 'rgba(180,231,198,0.8)'}}>Total Donors</p>
             <h3 className="text-4xl font-bold">
               {loading ? (
                 <span className="animate-pulse">--</span>
@@ -82,14 +82,14 @@ export function DonationStats() {
                 Math.floor(displayDonors)
               )}
             </h3>
-            <p className="text-emerald-100 text-xs mt-1">Community supporters</p>
+            <p className="text-xs mt-1" style={{color: 'rgba(180,231,198,0.6)'}}>Community supporters</p>
           </div>
           <div className="text-6xl opacity-20">❤️</div>
         </div>
       </div>
 
         {/* Status */}
-        <div className="bg-gradient-to-br from-[#DC143C] to-[#B91035] rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200">
+        <div className="rounded-xl p-6 text-white transform hover:scale-105 transition-transform duration-200" style={{background: 'linear-gradient(135deg, #DC143C 0%, #B91035 100%)', border: '1px solid rgba(255,255,255,0.08)'}}>
             <div className="flex items-center justify-between">
                 <div>
                     <p className="text-red-100 text-sm font-medium mb-1">Campaign Status</p>
@@ -108,7 +108,7 @@ export function DonationStats() {
                             </span>
                         )}
                     </h3>
-                    <p className="text-red-100 text-xs mt-1">
+                    <p className="text-xs mt-1" style={{color: 'rgba(255,180,180,0.7)'}}>
                         {isActive ? 'Accepting donations' : 'Temporarily paused'}
                     </p>
                 </div>

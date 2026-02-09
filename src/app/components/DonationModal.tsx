@@ -195,8 +195,8 @@ const DonationModal = ({
         <div className="donation-modal-overlay" onClick={(e) => {
             if (e.target === e.currentTarget && !isLoading) onClose();
         }}>
-            <div className="donation-modal" ref={modalRef}>
-                <button className="donation-modal-close" onClick={onClose} disabled={isLoading}>×</button>
+            <div className="donation-modal" ref={modalRef} role="dialog" aria-modal="true" aria-label="Donate to campaign">
+                <button className="donation-modal-close" onClick={onClose} disabled={isLoading} aria-label="Close donation modal">×</button>
 
                 {/* Step 1: Amount */}
                 {step === 1 && (

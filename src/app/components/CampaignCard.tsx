@@ -9,25 +9,25 @@ const CATEGORY_STYLES: Record<string, { bg: string; glow: string }> = {
     Humanitarian: { bg: "linear-gradient(135deg, #DC143C 0%, #B91030 100%)", glow: "rgba(220, 20, 60, 0.4)" },
     Healthcare: { bg: "linear-gradient(135deg, #DC143C 0%, #E8365A 100%)", glow: "rgba(220, 20, 60, 0.35)" },
     Health: { bg: "linear-gradient(135deg, #E8365A 0%, #DC143C 100%)", glow: "rgba(232, 54, 90, 0.4)" },
-    
+
     // Secondary categories - Nepal Blue variations
     Education: { bg: "linear-gradient(135deg, #003893 0%, #0047B3 100%)", glow: "rgba(0, 56, 147, 0.4)" },
     Technology: { bg: "linear-gradient(135deg, #0047B3 0%, #003893 100%)", glow: "rgba(0, 71, 179, 0.4)" },
     Infrastructure: { bg: "linear-gradient(135deg, #002D77 0%, #003893 100%)", glow: "rgba(0, 45, 119, 0.4)" },
-    
+
     // Success green - Rhododendron leaves
     Environment: { bg: "linear-gradient(135deg, #22A35D 0%, #2EC96F 100%)", glow: "rgba(34, 163, 93, 0.4)" },
     Agriculture: { bg: "linear-gradient(135deg, #2EC96F 0%, #22A35D 100%)", glow: "rgba(46, 201, 111, 0.4)" },
-    
+
     // Gradient combinations - Crimson to Blue
     "Women Empowerment": { bg: "linear-gradient(135deg, #DC143C 0%, #003893 100%)", glow: "rgba(220, 20, 60, 0.35)" },
     Culture: { bg: "linear-gradient(135deg, #E8365A 0%, #0047B3 100%)", glow: "rgba(220, 20, 60, 0.3)" },
-    
+
     // Hope/Gold - Diya lamp inspired
     Energy: { bg: "linear-gradient(135deg, #F7B32B 0%, #FFD166 100%)", glow: "rgba(247, 179, 43, 0.4)" },
     Livelihood: { bg: "linear-gradient(135deg, #FFD166 0%, #F7B32B 100%)", glow: "rgba(255, 209, 102, 0.4)" },
     Business: { bg: "linear-gradient(135deg, #F7B32B 0%, #22A35D 100%)", glow: "rgba(247, 179, 43, 0.35)" },
-    
+
     // Neutral/Support categories
     "Animal Welfare": { bg: "linear-gradient(135deg, #DC143C 0%, #F7B32B 100%)", glow: "rgba(220, 20, 60, 0.3)" },
     Housing: { bg: "linear-gradient(135deg, #003893 0%, #22A35D 100%)", glow: "rgba(0, 56, 147, 0.3)" },
@@ -96,18 +96,8 @@ const CampaignCard = memo(function CampaignCard({ campaign, onClick }: CampaignC
     const categoryStyle = CATEGORY_STYLES[campaign.category] || DEFAULT_CATEGORY_STYLE;
 
     return (
-        <article 
-            className="campaign-card" 
-            onClick={() => onClick(false)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    onClick(false);
-                }
-            }}
-            aria-label={`${campaign.title} campaign. ${progress.toFixed(0)}% funded, ${daysRemaining} days remaining. Click to view details.`}
+        <article
+            className="campaign-card"
         >
             {/* Campaign Image */}
             <div className="card-image-container">
@@ -132,6 +122,11 @@ const CampaignCard = memo(function CampaignCard({ campaign, onClick }: CampaignC
                     style={{ background: categoryStyle.bg }}
                 >
                     {campaign.category}
+                </span>
+
+                {/* Campaign ID Badge */}
+                <span className="campaign-id-badge" title={`Campaign ID: ${campaign.id}`}>
+                    ID: {campaign.id}
                 </span>
 
                 {/* Status Badge (Days/Urgent/Funded) */}

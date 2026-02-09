@@ -68,15 +68,15 @@ export function TransactionHistory() {
     if (loading) {
         return (
             <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="text-gray-500 mt-4">Loading transactions...</p>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#DC143C] mx-auto"></div>
+                <p className="mt-4" style={{color: 'rgba(180,198,231,0.5)'}}>Loading transactions...</p>
             </div>
         );
     }
 
     if (donations.length === 0) {
         return (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8" style={{color: 'rgba(180,198,231,0.5)'}}>
                 <p className="text-4xl mb-4">🎁</p>\n        <p>No donation history available yet.</p>
             </div>
         );
@@ -87,41 +87,42 @@ export function TransactionHistory() {
             {loading ? (
                 /* QA: Improved loading state with skeleton UI */
                 [1, 2, 3].map((i) => (
-                    <div key={i} className="border border-gray-100 rounded-lg p-4 bg-gray-50 animate-pulse">
+                    <div key={i} className="rounded-lg p-4 animate-pulse" style={{background: 'rgba(21,25,33,0.6)', border: '1px solid rgba(255,255,255,0.06)'}}>
                         <div className="flex justify-between">
-                            <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
-                            <div className="h-4 bg-gray-200 rounded w-1/6"></div>
+                            <div className="h-4 rounded w-1/3 mb-2" style={{background: 'rgba(255,255,255,0.08)'}}></div>
+                            <div className="h-4 rounded w-1/6" style={{background: 'rgba(255,255,255,0.08)'}}></div>
                         </div>
-                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                        <div className="h-3 rounded w-1/2" style={{background: 'rgba(255,255,255,0.06)'}}></div>
                     </div>
                 ))
             ) : donations.length === 0 ? (
-                <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                <div className="text-center py-12 rounded-lg" style={{background: 'rgba(21,25,33,0.4)', border: '2px dashed rgba(255,255,255,0.1)'}}>
                     <div className="text-4xl mb-3 opacity-50">📭</div>
-                    <p className="text-gray-500 font-medium">No donations found yet.</p>
-                    <p className="text-xs text-gray-400 mt-1">Be the first to contribute!</p>
+                    <p className="font-medium" style={{color: 'rgba(180,198,231,0.6)'}}>No donations found yet.</p>
+                    <p className="text-xs mt-1" style={{color: 'rgba(180,198,231,0.35)'}}>Be the first to contribute!</p>
                 </div>
             ) : (
                 donations.map((donation, index) => (
                     <div
                         key={index}
-                        className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-200 bg-white group"
+                        className="rounded-lg p-4 hover:shadow-md transition-all duration-200 group"
+                        style={{background: 'rgba(21,25,33,0.6)', border: '1px solid rgba(255,255,255,0.06)'}}
                     >
                         <div className="flex justify-between items-start">
                             <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-2">
-                                    <span className="font-mono text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200 group-hover:border-blue-200 transition-colors">
+                                    <span className="font-mono text-xs px-2 py-1 rounded" style={{color: 'rgba(180,198,231,0.6)', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)'}}>
                                         {donation.donor.slice(0, 4)}...{donation.donor.slice(-4)}
                                     </span>
-                                    <span className="text-green-600 font-bold flex items-center gap-1">
+                                    <span className="font-bold flex items-center gap-1" style={{color: '#22A35D'}}>
                                         {donation.amount.toFixed(4)} <span className="text-xs">SOL</span>
                                     </span>
                                 </div>
                                 {donation.message && (
-                                    <p className="text-gray-700 text-sm italic pr-4">"{donation.message}"</p>
+                                    <p className="text-sm italic pr-4" style={{color: 'rgba(180,198,231,0.7)'}}>"{donation.message}"</p>
                                 )}
                             </div>
-                            <div className="text-right text-xs text-gray-400 whitespace-nowrap">
+                            <div className="text-right text-xs whitespace-nowrap" style={{color: 'rgba(180,198,231,0.4)'}}>
                                 {new Date(donation.timestamp * 1000).toLocaleDateString()}
                             </div>
                         </div>

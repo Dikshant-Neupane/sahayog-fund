@@ -1,53 +1,65 @@
 "use client";
 
+import Navbar from '@/app/components/Navbar';
 import { DonationForm } from '@/app/components/DonationForm';
 import { DonationStats } from '@/app/components/DonationStats';
 import { TransactionHistory } from '@/app/components/TransactionHistory';
+import Link from 'next/link';
 
 export default function DonatePage() {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4">
-            <div className="max-w-6xl mx-auto">
-                {/* Header */}
-                <div className="text-center mb-12">
-                    <h1 className="text-5xl font-bold text-gray-900 mb-4">
-                        Support Sahayog Fund 🌟
-                    </h1>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                        Every donation makes a difference. Help us empower communities through
-                        transparent, blockchain-powered microfinance.
-                    </p>
-                </div>
+        <main className="main-container">
+            <Navbar />
 
-                {/* Stats Dashboard */}
-                <DonationStats />
+            <section className="donate-page-section">
+                <div className="donate-page-container">
+                    {/* Header */}
+                    <div className="donate-page-header">
+                        <Link href="/" className="donate-back-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="back-icon" aria-hidden="true">
+                                <path d="M19 12H5M12 19l-7-7 7-7" />
+                            </svg>
+                            Back to Campaigns
+                        </Link>
+                        <h1 className="donate-page-title">
+                            Support Sahayog Fund <span className="gradient-text">🌟</span>
+                        </h1>
+                        <p className="donate-page-subtitle">
+                            Every donation makes a difference. Help us empower communities through
+                            transparent, blockchain-powered microfinance.
+                        </p>
+                    </div>
 
-                {/* Donation Form */}
-                <div className="mb-12">
-                    <DonationForm />
-                </div>
+                    {/* Stats Dashboard */}
+                    <DonationStats />
 
-                {/* Recent Transactions */}
-                <div className="bg-white rounded-lg shadow-lg p-8">
-                    <h2 className="text-2xl font-bold mb-6 text-gray-800">Recent Donations</h2>
-                    <TransactionHistory />
-                </div>
+                    {/* Donation Form */}
+                    <div className="donate-form-wrapper">
+                        <DonationForm />
+                    </div>
 
-                {/* Transparency Message */}
-                <div className="mt-8 text-center text-sm text-gray-500">
-                    <p>
-                        All transactions are recorded on Solana blockchain.
-                        <a
-                            href="https://explorer.solana.com?cluster=devnet"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline ml-1"
-                        >
-                            View on Explorer →
-                        </a>
-                    </p>
+                    {/* Recent Transactions */}
+                    <div className="donate-transactions-wrapper">
+                        <h2 className="donate-transactions-title">Recent Donations</h2>
+                        <TransactionHistory />
+                    </div>
+
+                    {/* Transparency Message */}
+                    <div className="donate-transparency">
+                        <p>
+                            All transactions are recorded on Solana blockchain.
+                            <a
+                                href="https://explorer.solana.com?cluster=devnet"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="donate-explorer-link"
+                            >
+                                View on Explorer →
+                            </a>
+                        </p>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </section>
+        </main>
     );
 }

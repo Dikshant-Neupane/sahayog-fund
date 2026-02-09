@@ -134,7 +134,13 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                 if (!value.trim()) return 'Please pin the location on the map';
                 break;
             case 'goalAmount':
-                if (value && (isNaN(Number(value)) || Number(value) < 0)) return 'Invalid goal amount';
+                if (value && (isNaN(Number(value)) || Number(value) <= 0)) return 'Goal amount must be greater than 0';
+                break;
+            case 'category':
+                if (!value.trim()) return 'Category is required';
+                break;
+            case 'province':
+                if (!value.trim()) return 'Province is required';
                 break;
         }
         return undefined;
@@ -237,6 +243,8 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
             { name: 'eventDate', value: formData.eventDate },
             { name: 'location.address', value: formData.location.address },
             { name: 'location.coords', value: formData.location.coords },
+            { name: 'category', value: formData.category },
+            { name: 'province', value: formData.province },
         ];
 
         fieldsToValidate.forEach(({ name, value }) => {

@@ -1,11 +1,8 @@
-// Treasury wallet address (placeholder - replace with actual address in production)
-export const TREASURY_WALLET = "8HACvxLFboKua6ARScPZsqHVCMAQ7MniL8AhNDxomV9Y";
+// Re-export from central Solana config to maintain single source of truth
+import { SOLANA_CONFIG, getExplorerUrl } from '@/config/solana';
 
-// Conversion constant: 1 SOL = 1,000,000,000 lamports
-export const LAMPORTS_PER_SOL = 1_000_000_000;
-
-// Solana Explorer URL
+export const TREASURY_WALLET = SOLANA_CONFIG.FUND_WALLET.toString();
+export const LAMPORTS_PER_SOL = SOLANA_CONFIG.LAMPORTS_PER_SOL;
 export const SOLANA_EXPLORER_URL = "https://explorer.solana.com";
-
-// Network configuration
-export const NETWORK = process.env.NEXT_PUBLIC_NETWORK || "devnet";
+export const NETWORK = SOLANA_CONFIG.NETWORK;
+export { getExplorerUrl };

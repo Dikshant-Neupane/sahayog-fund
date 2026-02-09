@@ -81,28 +81,28 @@ export function DonationForm() {
 
     if (!connected) {
         return (
-            <div className="text-center p-8 bg-white rounded-lg shadow-lg transform hover:scale-[1.01] transition-transform duration-300">
-                <h3 className="text-2xl font-bold mb-4 text-gray-800">Support This Cause</h3>
-                <p className="text-gray-600 mb-6">
+            <div className="text-center p-8 rounded-xl" style={{background: 'rgba(26,32,44,0.85)', border: '1px solid rgba(255,255,255,0.08)'}}>
+                <h3 className="text-2xl font-bold mb-4 text-white">Support This Cause</h3>
+                <p className="mb-6" style={{color: 'rgba(180,198,231,0.7)'}}>
                     Connect your wallet to make a secure donation on Solana.
                 </p>
                 <div className="flex justify-center">
-                    <WalletMultiButton className="!bg-blue-600 hover:!bg-blue-700 !h-12 !px-6 !text-lg !font-semibold transition-all hover:scale-105 active:scale-95 shadow-md" />
+                    <WalletMultiButton className="!bg-[#DC143C] hover:!bg-[#B91030] !h-12 !px-6 !text-lg !font-semibold transition-all hover:scale-105 active:scale-95 shadow-md" />
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto border border-gray-100 relative overflow-hidden">
+        <div className="rounded-xl p-8 max-w-md mx-auto relative overflow-hidden" style={{background: 'rgba(26,32,44,0.85)', border: '1px solid rgba(255,255,255,0.08)'}}>
             {/* Background decoration */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -mr-10 -mt-10 opacity-50 pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 rounded-bl-full -mr-10 -mt-10 opacity-20 pointer-events-none" style={{background: 'rgba(220,20,60,0.3)'}}></div>
 
-            <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 relative z-10">Make a Donation</h2>
+            <h2 className="text-3xl font-bold mb-6 text-center text-white relative z-10">Make a Donation</h2>
 
             {/* Preset Amounts */}
             <div className="mb-6 relative z-10">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
+                <label className="block text-sm font-medium mb-3" style={{color: 'rgba(180,198,231,0.8)'}}>
                     Select Amount (SOL)
                 </label>
                 <div className="grid grid-cols-4 gap-3">
@@ -114,9 +114,10 @@ export function DonationForm() {
                                 setUseCustom(false);
                             }}
                             className={`py-3 px-4 rounded-lg border-2 font-semibold transition-all active:scale-95 duration-200 ${!useCustom && amount === preset
-                                    ? 'border-blue-600 bg-blue-50 text-blue-600 shadow-sm transform scale-105'
-                                    : 'border-gray-200 hover:border-blue-300 text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                                    ? 'border-[#DC143C] text-[#E8365A] shadow-sm transform scale-105'
+                                    : 'border-[rgba(255,255,255,0.12)] hover:border-[rgba(220,20,60,0.4)] text-[#B4C6E7] hover:text-white'
                                 }`}
+                            style={!useCustom && amount === preset ? {background: 'rgba(220,20,60,0.15)'} : {background: 'transparent'}}
                         >
                             {preset} ◎
                         </button>
@@ -131,9 +132,9 @@ export function DonationForm() {
                         type="checkbox"
                         checked={useCustom}
                         onChange={(e) => setUseCustom(e.target.checked)}
-                        className="mr-2 w-4 h-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300 transition-colors"
+                        className="mr-2 w-4 h-4 rounded transition-colors accent-[#DC143C]"
                     />
-                    <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">Enter Custom Amount</span>
+                    <span className="text-sm font-medium group-hover:text-[#E8365A] transition-colors" style={{color: 'rgba(180,198,231,0.8)'}}>Enter Custom Amount</span>
                 </label>
 
                 <div className={`overflow-hidden transition-all duration-300 ease-in-out ${useCustom ? 'max-h-20 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
@@ -145,9 +146,10 @@ export function DonationForm() {
                             placeholder="0.00"
                             step="0.01"
                             min="0.0001"
-                            className="w-full pl-4 pr-12 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 text-gray-800 transition-all font-mono"
+                            className="w-full pl-4 pr-12 py-3 border-2 rounded-lg focus:outline-none text-white transition-all font-mono"
+                            style={{background: 'rgba(21,25,33,0.9)', borderColor: 'rgba(255,255,255,0.12)'}}
                         />
-                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">SOL</span>
+                        <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold" style={{color: 'rgba(180,198,231,0.5)'}}>SOL</span>
                     </div>
                 </div>
             </div>
@@ -159,9 +161,9 @@ export function DonationForm() {
                         type="checkbox"
                         checked={showNameField}
                         onChange={(e) => setShowNameField(e.target.checked)}
-                        className="mr-2 w-4 h-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300 transition-colors"
+                        className="mr-2 w-4 h-4 rounded transition-colors accent-[#DC143C]"
                     />
-                    <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">Add your name (appears publicly)</span>
+                    <span className="text-sm font-medium group-hover:text-[#E8365A] transition-colors" style={{color: 'rgba(180,198,231,0.8)'}}>Add your name (appears publicly)</span>
                 </label>
 
                 <div className={`overflow-hidden transition-all duration-300 ease-in-out ${showNameField ? 'max-h-20 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
@@ -171,14 +173,15 @@ export function DonationForm() {
                         onChange={(e) => setDonorName(e.target.value.slice(0, 50))}
                         placeholder="Your name or nickname"
                         maxLength={50}
-                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 text-gray-800 transition-all"
+                        className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none text-white transition-all"
+                        style={{background: 'rgba(21,25,33,0.9)', borderColor: 'rgba(255,255,255,0.12)'}}
                     />
                 </div>
             </div>
 
             {/* Message */}
             <div className="mb-8 relative z-10">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2" style={{color: 'rgba(180,198,231,0.8)'}}>
                     Message to Fund (Optional)
                 </label>
                 <textarea
@@ -187,10 +190,11 @@ export function DonationForm() {
                     placeholder="Share your support... / आफ्नो सहयोग साझा गर्नुहोस्..."
                     maxLength={280}
                     rows={3}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 resize-none text-gray-800 transition-all bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 border-2 rounded-lg focus:outline-none resize-none text-white transition-all"
+                    style={{background: 'rgba(21,25,33,0.9)', borderColor: 'rgba(255,255,255,0.12)'}}
                 />
                 <div className="flex justify-end mt-1">
-                    <span className={`text-xs ${message.length > 250 ? 'text-amber-500 font-bold' : 'text-gray-400'}`}>
+                    <span className={`text-xs ${message.length > 250 ? 'text-amber-500 font-bold' : ''}`} style={{color: message.length > 250 ? undefined : 'rgba(180,198,231,0.4)'}}>
                         {message.length}/280
                     </span>
                 </div>
@@ -219,7 +223,7 @@ export function DonationForm() {
                 )}
             </button>
 
-            <p className="text-xs text-gray-400 mt-6 text-center flex items-center justify-center gap-1 group cursor-help">
+            <p className="text-xs mt-6 text-center flex items-center justify-center gap-1 group cursor-help" style={{color: 'rgba(180,198,231,0.4)'}}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:opacity-100 transition-opacity">
                     <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />

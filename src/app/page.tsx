@@ -2,13 +2,15 @@
 
 import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Navbar from "./components/Navbar";
 import SplashScreen from "./components/SplashScreen";
 import MissionSection from "./components/MissionSection";
 import CampaignCard from "./components/CampaignCard";
 import DonateButton from "./components/DonateButton";
-import DonationModal from "./components/DonationModal";
+
 import FundraiserForm from "./components/FundraiserForm";
+import Skeleton from "./components/Skeleton"; // Import Skeleton
 import campaignsData from "./lib/campaigns.json";
 import { Toaster, toast } from "react-hot-toast";
 import { useLanguage } from "./contexts/LanguageContext";
@@ -28,10 +30,10 @@ interface Campaign {
   beneficiaries?: number;
   verified?: boolean;
   tags?: string[];
+  representativeName?: string;
+  representativeRole?: string;
+  representativePhoto?: string;
 }
-
-// Type assertion for campaigns data
-const campaigns: Campaign[] = campaignsData as Campaign[];
 
 // Simulated recent donations for social proof
 const MOCK_RECENT_DONATIONS = [
@@ -45,16 +47,27 @@ const MOCK_RECENT_DONATIONS = [
 
 export default function Home() {
   const { t } = useLanguage();
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [isFundraiserFormOpen, setIsFundraiserFormOpen] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [donationModalCampaign, setDonationModalCampaign] = useState<Campaign | null>(null);
+
 
   // Refs for navigation anchoring
   const campaignsSectionRef = useRef<HTMLElement>(null);
   const detailSectionRef = useRef<HTMLElement>(null);
+
+  // Simulate data fetching
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCampaigns(campaignsData as Campaign[]);
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Calculate campaign priority score (higher = more priority)
   const getCampaignScore = useCallback((campaign: Campaign) => {
@@ -102,7 +115,7 @@ export default function Home() {
   const categories = useMemo(() => {
     const cats = new Set(campaigns.map((c) => c.category));
     return ["All", ...Array.from(cats).sort()];
-  }, []);
+  }, [campaigns]);
 
   // Filter and sort campaigns by priority
   const filteredCampaigns = useMemo(() => {
@@ -126,7 +139,7 @@ export default function Home() {
 
     // Sort by priority score (highest first)
     return [...filtered].sort((a, b) => getCampaignScore(b) - getCampaignScore(a));
-  }, [activeCategory, searchQuery, getCampaignScore]);
+  }, [activeCategory, searchQuery, getCampaignScore, campaigns]);
 
   // Calculate campaign progress
   const getProgress = useCallback((raised: number, goal: number) =>
@@ -143,20 +156,50 @@ export default function Home() {
     ), []);
 
   // Calculate total stats
-  const stats = useMemo(() => {
-    const totalRaised = campaigns.reduce((sum, c) => sum + c.raised, 0);
-    const activeCampaigns = campaigns.filter(c => {
+  // Calculate total stats
+  const [stats, setStats] = useState({
+    totalRaised: 0,
+    activeCampaigns: 0,
+    totalDonors: 0,
+    totalCampaigns: 0,
+    fullyFunded: 0
+  });
+
+  useEffect(() => {
+    if (campaigns.length === 0) return;
+
+    // Initial calculation
+    const totalRaisedVal = campaigns.reduce((sum, c) => sum + c.raised, 0);
+    const activeVal = campaigns.filter(c => {
       const daysLeft = Math.ceil(
         (new Date(c.endDate).getTime() - new Date().getTime()) /
         (1000 * 60 * 60 * 24)
       );
       return daysLeft > 0;
     }).length;
-    const totalDonors = Math.floor(totalRaised * 2.5);
-    const totalCampaigns = campaigns.length;
-    const fullyFunded = campaigns.filter(c => c.raised >= c.goal).length;
-    return { totalRaised, activeCampaigns, totalDonors, totalCampaigns, fullyFunded };
-  }, []);
+    const totalDonorsVal = Math.floor(totalRaisedVal * 2.5);
+    const totalCampaignsVal = campaigns.length;
+    const fullyFundedVal = campaigns.filter(c => c.raised >= c.goal).length;
+
+    setStats({
+      totalRaised: totalRaisedVal,
+      activeCampaigns: activeVal,
+      totalDonors: totalDonorsVal,
+      totalCampaigns: totalCampaignsVal,
+      fullyFunded: fullyFundedVal
+    });
+
+    // Simulated real-time updates (Dynamic Dashboard effect)
+    const interval = setInterval(() => {
+      setStats(prev => ({
+        ...prev,
+        totalRaised: prev.totalRaised + (Math.random() * 0.05),
+        totalDonors: prev.totalDonors + (Math.random() > 0.7 ? 1 : 0)
+      }));
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [campaigns]);
 
   // Handle logo click - navigate to campaigns grid
   const handleLogoClick = useCallback(() => {
@@ -216,589 +259,609 @@ export default function Home() {
       {showSplash && <SplashScreen onFinished={() => setShowSplash(false)} />}
       <main className="main-container" id="main-content">
         <Toaster position="top-right" />
-        <Navbar onLogoClick={handleLogoClick} />
+        <Navbar
+          onLogoClick={handleLogoClick}
+          onBrowseCampaignsClick={handleLogoClick}
+          onStartCampaignClick={() => setIsFundraiserFormOpen(true)}
+        />
 
-      {isFundraiserFormOpen ? (
-        <FundraiserForm onCancel={() => setIsFundraiserFormOpen(false)} />
-      ) : (
-        <>
-          {/* Hero Section */}
-          <section className="hero-section">
-            <div className="hero-background">
-              <div className="hero-glow hero-glow-1" />
-              <div className="hero-glow hero-glow-2" />
-              <div className="hero-glow hero-glow-3" />
-            </div>
-
-            <div className="hero-content">
-              {/* Hero Logo Mark */}
-              <div className="hero-logo-mark">
-                <Image
-                  src="/logo.png"
-                  alt=""
-                  width={220}
-                  height={220}
-                  priority
-                  className="hero-logo-img"
-                  aria-hidden="true"
-                />
+        {isFundraiserFormOpen ? (
+          <FundraiserForm onCancel={() => setIsFundraiserFormOpen(false)} />
+        ) : (
+          <>
+            {/* Hero Section */}
+            <section className="hero-section">
+              <div className="hero-background">
+                <div className="hero-glow hero-glow-1" />
+                <div className="hero-glow hero-glow-2" />
+                <div className="hero-glow hero-glow-3" />
               </div>
 
-              <div className="hero-badge">
-                <span className="badge-dot" />
-                <span>{t.heroBadge}</span>
-              </div>
-
-              <h1 className="hero-title">
-                {t.heroTitle1}
-                <br />
-                <span className="gradient-text">{t.heroTitle2}</span>
-              </h1>
-
-              <p className="hero-subtitle">
-                {t.heroSubtitle}
-              </p>
-
-              <div className="hero-actions">
-                <button
-                  className="action-btn primary"
-                  onClick={() => {
-                    handleLogoClick(); // Go to campaigns
-                  }}
-                >
-                  {t.exploreCampaigns}
-                </button>
-                <button
-                  className="action-btn secondary"
-                  onClick={toggleFundraiserForm}
-                >
-                  {t.startFundraiser}
-                </button>
-              </div>
-
-              {/* Stats */}
-              <div className="hero-stats">
-                <div className="stat-item">
-                  <span className="stat-value">{stats.totalRaised.toFixed(1)}</span>
-                  <span className="stat-label">{t.solRaised}</span>
-                </div>
-                <div className="stat-divider" />
-                <div className="stat-item">
-                  <span className="stat-value">{stats.activeCampaigns}</span>
-                  <span className="stat-label">{t.activeCampaigns}</span>
-                </div>
-                <div className="stat-divider" />
-                <div className="stat-item">
-                  <span className="stat-value">{stats.totalDonors}+</span>
-                  <span className="stat-label">{t.donors}</span>
-                </div>
-              </div>
-
-              {/* Trust Signals */}
-              <div className="trust-signals">
-                <div className="trust-item">
-                  <span className="trust-icon">�</span>
-                  <span>{t.onChain}</span>
-                </div>
-                <div className="trust-item">
-                  <span className="trust-icon">⚡</span>
-                  <span>{t.fastSettlement}</span>
-                </div>
-                <div className="trust-item">
-                  <span className="trust-icon">💎</span>
-                  <span>{t.trustLowFees}</span>
-                </div>
-                <div className="trust-item">
-                  <span className="trust-icon">✓</span>
-                  <span>{t.madeForNepal}</span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* How It Works Section */}
-          {!selectedCampaign && !isFundraiserFormOpen && (
-            <section className="how-it-works-section">
-              <div className="how-it-works-header">
-                <h2>{t.howItWorksTitle}</h2>
-                <p>{t.howItWorksSubtitle}</p>
-              </div>
-              <div className="steps-grid">
-                <div className="step-card">
-                  <div className="step-number step-number-1">
-                    <svg className="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                    </svg>
-                  </div>
-                  <h3>{t.step1Title}</h3>
-                  <p>{t.step1Desc}</p>
-                </div>
-                <div className="step-card">
-                  <div className="step-number step-number-2">
-                    <svg className="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                  </div>
-                  <h3>{t.step2Title}</h3>
-                  <p>{t.step2Desc}</p>
-                </div>
-                <div className="step-card">
-                  <div className="step-number step-number-3">
-                    <svg className="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                  </div>
-                  <h3>{t.step3Title}</h3>
-                  <p>{t.step3Desc}</p>
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* Campaign Section */}
-          {!selectedCampaign ? (
-            <section className="campaigns-section" ref={campaignsSectionRef}>
-              {/* Platform Stats Bar */}
-              <div className="platform-stats-bar">
-                <div className="platform-stat">
-                  <span className="platform-stat-value">{stats.totalRaised.toFixed(1)}</span>
-                  <span className="platform-stat-label">SOL Raised</span>
-                </div>
-                <div className="platform-stat">
-                  <span className="platform-stat-value">{stats.totalCampaigns}</span>
-                  <span className="platform-stat-label">Total Campaigns</span>
-                </div>
-                <div className="platform-stat">
-                  <span className="platform-stat-value">{stats.totalDonors}+</span>
-                  <span className="platform-stat-label">Total Donors</span>
-                </div>
-                <div className="platform-stat">
-                  <span className="platform-stat-value">{stats.fullyFunded}</span>
-                  <span className="platform-stat-label">Fully Funded</span>
-                </div>
-              </div>
-
-              {/* Recent Donations Feed - Social Proof */}
-              <div className="social-proof-section">
-                <div className="social-proof-header">
-                  <h3>🌺 Recent Donations</h3>
-                  <div className="live-indicator">
-                    <span className="live-dot" />
-                    Live on Solana
-                  </div>
-                </div>
-                <div className="donations-feed">
-                  {MOCK_RECENT_DONATIONS.map((donation, index) => (
-                    <div key={index} className="donation-feed-card">
-                      <div className="feed-card-header">
-                        <div className="feed-avatar">{donation.donor.charAt(0)}</div>
-                        <div className="feed-donor-info">
-                          <span className="feed-donor-address">{donation.donor}</span>
-                          <span className="feed-time">{donation.time}</span>
-                        </div>
-                      </div>
-                      <div className="feed-amount">{donation.amount} SOL</div>
-                      <div className="feed-campaign">→ {donation.campaign}</div>
-                      {donation.message && (
-                        <div className="feed-message">&ldquo;{donation.message}&rdquo;</div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Section Header */}
-              <div className="section-header">
-                <h2 className="section-title">
-                  <span className="title-icon">🌟</span>
-                  {t.featuredCampaigns}
-                </h2>
-                <p className="section-subtitle">
-                  {t.discoverCauses}
-                </p>
-              </div>
-
-              {/* Search Bar */}
-              <div className="search-container">
-                <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-                <input
-                  type="text"
-                  className="search-input"
-                  placeholder="Search campaigns by name, location, category..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  aria-label="Search campaigns"
-                />
-              </div>
-
-              {/* Category Filter */}
-              <div className="category-filter" role="tablist" aria-label="Filter campaigns by category">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    className={`filter-btn ${activeCategory === category ? "active" : ""}`}
-                    onClick={() => setActiveCategory(category)}
-                    role="tab"
-                    aria-selected={activeCategory === category}
-                    aria-controls="campaign-grid"
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-
-              {/* Campaign Grid */}
-              <div className="campaign-grid" id="campaign-grid" role="tabpanel" aria-label="Campaign list">
-                {filteredCampaigns.map((campaign) => (
-                  <CampaignCard
-                    key={campaign.id}
-                    campaign={campaign}
-                    onClick={(scrollToDonation) => handleCampaignClick(campaign, scrollToDonation)}
+              <div className="hero-content">
+                {/* Hero Logo Mark */}
+                <div className="hero-logo-mark">
+                  <Image
+                    src="/logo.png"
+                    alt=""
+                    width={220}
+                    height={220}
+                    priority
+                    className="hero-logo-img"
+                    aria-hidden="true"
                   />
-                ))}
-              </div>
+                </div>
 
-              {/* Empty State */}
-              {filteredCampaigns.length === 0 && (
-                <div className="empty-state">
-                  <p>{searchQuery ? `No campaigns found for "${searchQuery}"` : "No campaigns found in this category."}</p>
+                <div className="hero-badge">
+                  <span className="badge-dot" />
+                  <span>{t.heroBadge}</span>
+                </div>
+
+                <h1 className="hero-title">
+                  {t.heroTitle1}
+                  <br />
+                  <span className="gradient-text">{t.heroTitle2}</span>
+                </h1>
+
+                <p className="hero-subtitle">
+                  {t.heroSubtitle}
+                </p>
+
+                <div className="hero-actions">
                   <button
-                    className="filter-btn active"
+                    className="action-btn primary"
                     onClick={() => {
-                      setActiveCategory("All");
-                      setSearchQuery("");
+                      handleLogoClick(); // Go to campaigns
                     }}
                   >
-                    View All Campaigns
+                    {t.exploreCampaigns}
+                  </button>
+                  <button
+                    className="action-btn secondary"
+                    onClick={toggleFundraiserForm}
+                  >
+                    {t.startFundraiser}
                   </button>
                 </div>
-              )}
-            </section>
-          ) : (
-            /* Campaign Detail View */
-            <section className="detail-section" ref={detailSectionRef}>
-              {/* Back Button */}
-              <button 
-                className="back-button" 
-                onClick={handleBackClick}
-                aria-label="Go back to campaign list"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className="back-icon"
-                  aria-hidden="true"
-                >
-                  <path d="M19 12H5M12 19l-7-7 7-7" />
-                </svg>
-                {t.backToCampaigns}
-              </button>
 
-              <div className="detail-container">
-                {/* Left Column - Image & Info */}
-                <div className="detail-left">
-                  <div className="detail-image-container">
-                    <Image
-                      src={selectedCampaign.image}
-                      alt={selectedCampaign.title}
-                      fill
-                      className="detail-image"
-                      priority
-                      sizes="(max-width: 1024px) 100vw, 60vw"
-                    />
-                    <div className="detail-image-overlay" />
+                {/* Stats */}
+                <div className="hero-stats">
+                  <div className="stat-item">
+                    <span className="stat-value">{stats.totalRaised.toFixed(1)}</span>
+                    <span className="stat-label">{t.solRaised}</span>
                   </div>
-
-                  <div className="detail-info">
-                    <span
-                      className={`detail-category category-${selectedCampaign.category.toLowerCase().replace(/\s+/g, "-")}`}
-                    >
-                      {selectedCampaign.category}
-                    </span>
-
-                    <h1 className="detail-title">{selectedCampaign.title}</h1>
-
-                    <div className="detail-meta">
-                      <div className="meta-item">
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                          <circle cx="12" cy="10" r="3" />
-                        </svg>
-                        <span>{selectedCampaign.location}</span>
-                      </div>
-                      <div className="meta-item">
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <polyline points="12 6 12 12 16 14" />
-                        </svg>
-                        <span>{getDaysRemaining(selectedCampaign.endDate)} days left</span>
-                      </div>
-                      <div className="meta-item">
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                          <circle cx="12" cy="7" r="4" />
-                        </svg>
-                        <span>by {selectedCampaign.organizer}</span>
-                      </div>
-                    </div>
-
-                    <p className="detail-description">{selectedCampaign.description}</p>
-
-                    {/* Progress */}
-                    <div className="detail-progress">
-                      <div className="progress-header">
-                        <span className="progress-raised-text">
-                          <span className="raised-amount">{selectedCampaign.raised}</span> SOL raised
-                        </span>
-                        <span className="progress-goal-text">
-                          of <span className="goal-amount">{selectedCampaign.goal}</span> SOL goal
-                        </span>
-                      </div>
-                      <div className="progress-bar-large">
-                        <div
-                          className="progress-fill-large"
-                          style={{
-                            width: `${getProgress(selectedCampaign.raised, selectedCampaign.goal)}%`,
-                          }}
-                        />
-                      </div>
-                      <span className="progress-percent-text">
-                        {getProgress(selectedCampaign.raised, selectedCampaign.goal).toFixed(0)}% funded
-                      </span>
-                    </div>
+                  <div className="stat-divider" />
+                  <div className="stat-item">
+                    <span className="stat-value">{stats.activeCampaigns}</span>
+                    <span className="stat-label">{t.activeCampaigns}</span>
+                  </div>
+                  <div className="stat-divider" />
+                  <div className="stat-item">
+                    <span className="stat-value">{stats.totalDonors}+</span>
+                    <span className="stat-label">{t.donors}</span>
                   </div>
                 </div>
 
-                {/* Right Column - Donate */}
-                <div className="detail-right" id="donation-section">
-                  <div className="donate-card">
-                    <DonateButton
-                      campaignId={selectedCampaign.id}
-                      walletAddress={selectedCampaign.walletAddress}
-                      campaignTitle={selectedCampaign.title}
-                    />
+                {/* Trust Signals */}
+                <div className="trust-signals">
+                  <div className="trust-item">
+                    <span className="trust-icon">🔗</span>
+                    <span>{t.onChain}</span>
+                  </div>
+                  <div className="trust-item">
+                    <span className="trust-icon">⚡</span>
+                    <span>{t.fastSettlement}</span>
+                  </div>
+                  <div className="trust-item">
+                    <span className="trust-icon">💎</span>
+                    <span>{t.trustLowFees}</span>
+                  </div>
+                  <div className="trust-item">
+                    <span className="trust-icon">✓</span>
+                    <span>{t.madeForNepal}</span>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-                    {/* Trust Badges */}
-                    <div className="trust-badges">
-                      <div className="trust-badge">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                          <path d="M9 12l2 2 4-4" />
-                        </svg>
-                        <span>Verified Campaign</span>
-                      </div>
-                      <div className="trust-badge">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          <path d="M9 12l2 2 4-4" />
-                        </svg>
-                        <span>Blockchain Secured</span>
-                      </div>
-                      <div className="trust-badge">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                        </svg>
-                        <span>Instant Transfer</span>
-                      </div>
-                    </div>
-
-                    {/* Wallet Address */}
-                    <div className="wallet-address-section">
-                      <span className="wallet-label">Campaign Wallet</span>
-                      <div className="wallet-address">
-                        <code>{selectedCampaign.walletAddress.slice(0, 8)}...{selectedCampaign.walletAddress.slice(-8)}</code>
-                        <button
-                          className="copy-btn"
-                          onClick={async () => {
-                            try {
-                              await navigator.clipboard.writeText(selectedCampaign.walletAddress);
-                              toast.success('Wallet address copied!', {
-                                duration: 2000,
-                                icon: '📋',
-                                style: {
-                                  background: '#0A0E1A',
-                                  color: '#fff',
-                                  border: '1px solid #22A35D',
-                                },
-                              });
-                            } catch {
-                              toast.error('Failed to copy address', {
-                                style: {
-                                  background: '#0A0E1A',
-                                  color: '#fff',
-                                  border: '1px solid #DC143C',
-                                },
-                              });
-                            }
-                          }}
-                          title="Copy address"
-                          aria-label="Copy wallet address to clipboard"
-                        >
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Report Campaign Button */}
-                    <button
-                      className="report-button"
-                      onClick={() => {
-                        toast.success('Report submitted. Our team will review this campaign.', {
-                          icon: '🚩',
-                          duration: 4000,
-                          style: {
-                            background: '#0A0E1A',
-                            color: '#fff',
-                            border: '1px solid #F7B32B',
-                          },
-                        });
-                      }}
-                      aria-label="Report this campaign"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
-                        <line x1="4" y1="22" x2="4" y2="15" />
+            {/* How It Works Section */}
+            {!selectedCampaign && !isFundraiserFormOpen && (
+              <section className="how-it-works-section">
+                <div className="how-it-works-header">
+                  <h2>{t.howItWorksTitle}</h2>
+                  <p>{t.howItWorksSubtitle}</p>
+                </div>
+                <div className="steps-grid">
+                  <div className="step-card">
+                    <div className="step-number step-number-1">
+                      <svg className="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                       </svg>
-                      Report Campaign
+                    </div>
+                    <h3>{t.step1Title}</h3>
+                    <p>{t.step1Desc}</p>
+                  </div>
+                  <div className="step-card">
+                    <div className="step-number step-number-2">
+                      <svg className="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    </div>
+                    <h3>{t.step2Title}</h3>
+                    <p>{t.step2Desc}</p>
+                  </div>
+                  <div className="step-card">
+                    <div className="step-number step-number-3">
+                      <svg className="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    </div>
+                    <h3>{t.step3Title}</h3>
+                    <p>{t.step3Desc}</p>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Campaign Section */}
+            {!selectedCampaign ? (
+              <section className="campaigns-section" ref={campaignsSectionRef}>
+                {/* Platform Stats Bar */}
+                <div className="platform-stats-bar">
+                  <div className="platform-stat">
+                    <span className="platform-stat-value">{stats.totalRaised.toFixed(1)}</span>
+                    <span className="platform-stat-label">SOL Raised</span>
+                  </div>
+                  <div className="platform-stat">
+                    <span className="platform-stat-value">{stats.totalCampaigns}</span>
+                    <span className="platform-stat-label">Total Campaigns</span>
+                  </div>
+                  <div className="platform-stat">
+                    <span className="platform-stat-value">{stats.totalDonors}+</span>
+                    <span className="platform-stat-label">Total Donors</span>
+                  </div>
+                  <div className="platform-stat">
+                    <span className="platform-stat-value">{stats.fullyFunded}</span>
+                    <span className="platform-stat-label">Fully Funded</span>
+                  </div>
+                </div>
+
+                {/* Recent Donations Feed - Social Proof */}
+                <div className="social-proof-section">
+                  <div className="social-proof-header">
+                    <h3>🌺 Recent Donations</h3>
+                    <div className="live-indicator">
+                      <span className="live-dot" />
+                      Live on Solana
+                    </div>
+                  </div>
+                  <div className="donations-feed">
+                    {MOCK_RECENT_DONATIONS.map((donation, index) => (
+                      <div key={index} className="donation-feed-card">
+                        <div className="feed-card-header">
+                          <div className="feed-avatar">{donation.donor.charAt(0)}</div>
+                          <div className="feed-donor-info">
+                            <span className="feed-donor-address">{donation.donor}</span>
+                            <span className="feed-time">{donation.time}</span>
+                          </div>
+                        </div>
+                        <div className="feed-amount">{donation.amount} SOL</div>
+                        <div className="feed-campaign">→ {donation.campaign}</div>
+                        {donation.message && (
+                          <div className="feed-message">&ldquo;{donation.message}&rdquo;</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Section Header */}
+                <div className="section-header">
+                  <h2 className="section-title">
+                    <span className="title-icon">🌟</span>
+                    {t.featuredCampaigns}
+                  </h2>
+                  <p className="section-subtitle">
+                    {t.discoverCauses}
+                  </p>
+                </div>
+
+                {/* Search Bar */}
+                <div className="search-container">
+                  <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                  <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Search campaigns by name, location, category..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    aria-label="Search campaigns"
+                  />
+                </div>
+
+                {/* Category Filter */}
+                <div className="category-filter" role="tablist" aria-label="Filter campaigns by category">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      className={`filter-btn ${activeCategory === category ? "active" : ""}`}
+                      onClick={() => setActiveCategory(category)}
+                      role="tab"
+                      aria-selected={activeCategory === category}
+                      aria-controls="campaign-grid"
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Campaign Grid */}
+                <div className="campaign-grid" id="campaign-grid" role="tabpanel" aria-label="Campaign list">
+                  {isLoading ? (
+                    Array.from({ length: 6 }).map((_, i) => (
+                      <Skeleton key={i} />
+                    ))
+                  ) : (
+                    filteredCampaigns.map((campaign) => (
+                      <CampaignCard
+                        key={campaign.id}
+                        campaign={campaign}
+                        onClick={(scrollToDonation) => handleCampaignClick(campaign, scrollToDonation)}
+                      />
+                    ))
+                  )}
+                </div>
+
+                {/* Empty State */}
+                {filteredCampaigns.length === 0 && (
+                  <div className="empty-state">
+                    <p>{searchQuery ? `No campaigns found for "${searchQuery}"` : "No campaigns found in this category."}</p>
+                    <button
+                      className="filter-btn active"
+                      onClick={() => {
+                        setActiveCategory("All");
+                        setSearchQuery("");
+                      }}
+                    >
+                      View All Campaigns
                     </button>
                   </div>
+                )}
+              </section>
+            ) : (
+              /* Campaign Detail View */
+              <section className="detail-section" ref={detailSectionRef}>
+                {/* Back Button */}
+                <button
+                  className="back-button"
+                  onClick={handleBackClick}
+                  aria-label="Go back to campaign list"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="back-icon"
+                    aria-hidden="true"
+                  >
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                  </svg>
+                  {t.backToCampaigns}
+                </button>
+
+                <div className="detail-container">
+                  {/* Left Column - Image & Info */}
+                  <div className="detail-left">
+                    <div className="detail-image-container">
+                      <Image
+                        src={selectedCampaign.image}
+                        alt={selectedCampaign.title}
+                        fill
+                        className="detail-image"
+                        priority
+                        sizes="(max-width: 1024px) 100vw, 60vw"
+                      />
+                      <div className="detail-image-overlay" />
+                    </div>
+
+                    <div className="detail-info">
+                      <span
+                        className={`detail-category category-${selectedCampaign.category.toLowerCase().replace(/\s+/g, "-")}`}
+                      >
+                        {selectedCampaign.category}
+                      </span>
+
+                      <h1 className="detail-title">{selectedCampaign.title}</h1>
+
+                      <div className="detail-meta">
+                        <div className="meta-item">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                          </svg>
+                          <span>{selectedCampaign.location}</span>
+                        </div>
+                        <div className="meta-item">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                          </svg>
+                          <span>{getDaysRemaining(selectedCampaign.endDate)} days left</span>
+                        </div>
+                        <div className="meta-item">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                          </svg>
+                          <span>by {selectedCampaign.organizer}</span>
+                        </div>
+                      </div>
+
+                      <p className="detail-description">{selectedCampaign.description}</p>
+
+                      {/* Representative Info */}
+                      {selectedCampaign.representativeName && (
+                        <div className="detail-representative">
+                          {selectedCampaign.representativePhoto && (
+                            <Image
+                              src={selectedCampaign.representativePhoto}
+                              alt={selectedCampaign.representativeName}
+                              width={52}
+                              height={52}
+                              className="detail-representative-photo"
+                            />
+                          )}
+                          <div className="detail-representative-info">
+                            <span className="detail-representative-name">{selectedCampaign.representativeName}</span>
+                            {selectedCampaign.representativeRole && (
+                              <span className="detail-representative-role">{selectedCampaign.representativeRole}</span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Progress */}
+                      <div className="detail-progress">
+                        <div className="progress-header">
+                          <span className="progress-raised-text">
+                            <span className="raised-amount">{selectedCampaign.raised}</span> SOL raised
+                          </span>
+                          <span className="progress-goal-text">
+                            of <span className="goal-amount">{selectedCampaign.goal}</span> SOL goal
+                          </span>
+                        </div>
+                        <div className="progress-bar-large">
+                          <div
+                            className="progress-fill-large"
+                            style={{
+                              width: `${getProgress(selectedCampaign.raised, selectedCampaign.goal)}%`,
+                            }}
+                          />
+                        </div>
+                        <span className="progress-percent-text">
+                          {getProgress(selectedCampaign.raised, selectedCampaign.goal).toFixed(0)}% funded
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column - Donate */}
+                  <div className="detail-right" id="donation-section">
+                    <div className="donate-card">
+                      <DonateButton
+                        campaignId={selectedCampaign.id}
+                        walletAddress={selectedCampaign.walletAddress}
+                        campaignTitle={selectedCampaign.title}
+                      />
+
+                      {/* Trust Badges */}
+                      <div className="trust-badges">
+                        <div className="trust-badge">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            <path d="M9 12l2 2 4-4" />
+                          </svg>
+                          <span>Verified Campaign</span>
+                        </div>
+                        <div className="trust-badge">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path d="M9 12l2 2 4-4" />
+                          </svg>
+                          <span>Blockchain Secured</span>
+                        </div>
+                        <div className="trust-badge">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                          </svg>
+                          <span>Instant Transfer</span>
+                        </div>
+                      </div>
+
+                      {/* Wallet Address */}
+                      <div className="wallet-address-section">
+                        <span className="wallet-label">Campaign Wallet</span>
+                        <div className="wallet-address">
+                          <code>{selectedCampaign.walletAddress.slice(0, 8)}...{selectedCampaign.walletAddress.slice(-8)}</code>
+                          <button
+                            className="copy-btn"
+                            onClick={async () => {
+                              try {
+                                await navigator.clipboard.writeText(selectedCampaign.walletAddress);
+                                toast.success('Wallet address copied!', {
+                                  duration: 2000,
+                                  icon: '📋',
+                                  style: {
+                                    background: '#0A0E1A',
+                                    color: '#fff',
+                                    border: '1px solid #22A35D',
+                                  },
+                                });
+                              } catch {
+                                toast.error('Failed to copy address', {
+                                  style: {
+                                    background: '#0A0E1A',
+                                    color: '#fff',
+                                    border: '1px solid #DC143C',
+                                  },
+                                });
+                              }
+                            }}
+                            title="Copy address"
+                            aria-label="Copy wallet address to clipboard"
+                          >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Report Campaign Button */}
+                      <button
+                        className="report-button"
+                        onClick={() => {
+                          toast.success('Report submitted. Our team will review this campaign.', {
+                            icon: '🚩',
+                            duration: 4000,
+                            style: {
+                              background: '#0A0E1A',
+                              color: '#fff',
+                              border: '1px solid #F7B32B',
+                            },
+                          });
+                        }}
+                        aria-label="Report this campaign"
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                          <line x1="4" y1="22" x2="4" y2="15" />
+                        </svg>
+                        Report Campaign
+                      </button>
+                    </div>
+                  </div>
                 </div>
+              </section>
+            )}
+
+
+            {/* Mission Section - Hackathon Criteria */}
+            {!selectedCampaign && !isFundraiserFormOpen && (
+              <MissionSection />
+            )}
+
+            {/* Features Section */}
+            {!selectedCampaign && !isFundraiserFormOpen && (
+              <section className="features-section">
+                <h2 className="features-title">{t.technicalAdvantages}</h2>
+                <div className="features-grid">
+                  <div className="feature-card">
+                    <div className="feature-icon feature-icon-1">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      </svg>
+                    </div>
+                    <h3>{t.noSignupRequired}</h3>
+                    <p>{t.noSignupDesc}</p>
+                  </div>
+                  <div className="feature-card">
+                    <div className="feature-icon feature-icon-2">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 6v6l4 2" />
+                      </svg>
+                    </div>
+                    <h3>{t.instantTransactions}</h3>
+                    <p>{t.instantTransactionsDesc}</p>
+                  </div>
+                  <div className="feature-card">
+                    <div className="feature-icon feature-icon-3">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <path d="M12 8v8M8 12h8" />
+                      </svg>
+                    </div>
+                    <h3>{t.fullTransparency}</h3>
+                    <p>{t.fullTransparencyDesc}</p>
+                  </div>
+                  <div className="feature-card">
+                    <div className="feature-icon feature-icon-4">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
+                      </svg>
+                    </div>
+                    <h3>{t.lowFees}</h3>
+                    <p>{t.lowFeesDesc}</p>
+                  </div>
+                </div>
+              </section>
+            )}
+          </>
+        )}
+
+        {/* Footer */}
+        <footer className="footer">
+          <div className="footer-content">
+            <div className="footer-brand">
+              <div className="footer-logo">
+                <Image src="/logo.png" alt="" width={44} height={44} className="footer-logo-img" aria-hidden="true" />
+                <span>SahayogFund</span>
               </div>
-            </section>
-          )}
-
-
-          {/* Mission Section - Hackathon Criteria */}
-          {!selectedCampaign && !isFundraiserFormOpen && (
-            <MissionSection />
-          )}
-
-          {/* Features Section */}
-          {!selectedCampaign && !isFundraiserFormOpen && (
-            <section className="features-section">
-              <h2 className="features-title">{t.technicalAdvantages}</h2>
-              <div className="features-grid">
-                <div className="feature-card">
-                  <div className="feature-icon feature-icon-1">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    </svg>
-                  </div>
-                  <h3>{t.noSignupRequired}</h3>
-                  <p>{t.noSignupDesc}</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon feature-icon-2">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 6v6l4 2" />
-                    </svg>
-                  </div>
-                  <h3>{t.instantTransactions}</h3>
-                  <p>{t.instantTransactionsDesc}</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon feature-icon-3">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      <path d="M12 8v8M8 12h8" />
-                    </svg>
-                  </div>
-                  <h3>{t.fullTransparency}</h3>
-                  <p>{t.fullTransparencyDesc}</p>
-                </div>
-                <div className="feature-card">
-                  <div className="feature-icon feature-icon-4">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                      <path d="M2 17l10 5 10-5" />
-                      <path d="M2 12l10 5 10-5" />
-                    </svg>
-                  </div>
-                  <h3>{t.lowFees}</h3>
-                  <p>{t.lowFeesDesc}</p>
-                </div>
+              <p>{t.heroSubtitle.split('.')[0]}.</p>
+            </div>
+            <div className="footer-links">
+              <div className="footer-column">
+                <h4>{t.platform}</h4>
+                <a href="/verify">Verify Campaign</a>
+                <a href="#" onClick={(e) => { e.preventDefault(); setIsFundraiserFormOpen(true); }}>{t.startFundraiser}</a>
+                <a href="#" onClick={(e) => { e.preventDefault(); handleLogoClick(); }}>{t.browseCauses}</a>
               </div>
-            </section>
-          )}
-        </>
-      )}
-
-      {/* Footer */}
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-brand">
-            <div className="footer-logo">
-              <Image src="/logo.png" alt="" width={44} height={44} className="footer-logo-img" aria-hidden="true" />
-              <span>SahayogFund</span>
-            </div>
-            <p>{t.heroSubtitle.split('.')[0]}.</p>
-          </div>
-          <div className="footer-links">
-            <div className="footer-column">
-              <h4>{t.platform}</h4>
-              <a href="/verify">Verify Campaign</a>
-              <a href="#" onClick={(e) => { e.preventDefault(); setIsFundraiserFormOpen(true); }}>{t.startFundraiser}</a>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleLogoClick(); }}>{t.browseCauses}</a>
-            </div>
-            <div className="footer-column">
-              <h4>{t.resources}</h4>
-              <a href="#">{t.documentation}</a>
-              <a href="#">{t.solanaExplorer}</a>
-              <a href="#">{t.getTestSol}</a>
-            </div>
-            <div className="footer-column">
-              <h4>{t.community}</h4>
-              <a href="#">Discord</a>
-              <a href="#">Twitter</a>
-              <a href="#">GitHub</a>
+              <div className="footer-column">
+                <h4>{t.resources}</h4>
+                <a href="#">{t.documentation}</a>
+                <a href="#">{t.solanaExplorer}</a>
+                <a href="#">{t.getTestSol}</a>
+              </div>
+              <div className="footer-column">
+                <h4>{t.community}</h4>
+                <a href="#">Discord</a>
+                <a href="#">Twitter</a>
+                <a href="#">GitHub</a>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="footer-bottom">
-          <p>© 2026 SahayogFund. {t.builtWithLove}</p>
-          <p className="network-badge">
-            <span className="network-dot" />
-            {t.connectedToDevnet}
-          </p>
-        </div>
-      </footer>
-    </main>
+          <div className="footer-bottom">
+            <p>© 2026 SahayogFund. {t.builtWithLove}</p>
+            <p className="network-badge">
+              <span className="network-dot" />
+              {t.connectedToDevnet}
+            </p>
+          </div>
+        </footer>
+      </main>
 
-    {/* Donation Modal */}
-    {donationModalCampaign && (
-      <DonationModal
-        isOpen={!!donationModalCampaign}
-        onClose={() => setDonationModalCampaign(null)}
-        campaignId={donationModalCampaign.id}
-        walletAddress={donationModalCampaign.walletAddress}
-        campaignTitle={donationModalCampaign.title}
-        campaignOrganizer={donationModalCampaign.organizer}
-      />
-    )}
     </>
   );
 }
