@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 
 const MapPicker = dynamic(() => import("./MapPicker"), { ssr: false });
@@ -13,23 +13,48 @@ interface FundraiserFormProps {
 interface FormErrors {
     organizationName?: string;
     representativeName?: string;
+    representativeEmail?: string;
+    representativePhone?: string;
+    representativeRole?: string;
     description?: string;
     walletAddress?: string;
     verificationDetails?: string;
     eventDate?: string;
     locationAddress?: string;
     locationCoords?: string;
+    category?: string;
+    goalAmount?: string;
+    province?: string;
 }
+
+const CATEGORIES = [
+    'Humanitarian', 'Healthcare', 'Health', 'Education', 'Technology',
+    'Infrastructure', 'Environment', 'Agriculture', 'Women Empowerment',
+    'Culture', 'Energy', 'Livelihood', 'Business', 'Animal Welfare',
+    'Housing', 'Accessibility',
+];
+
+const PROVINCES = [
+    'Koshi', 'Madhesh', 'Bagmati', 'Gandaki', 'Lumbini', 'Karnali', 'Sudurpashchim',
+];
 
 const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
     const [formData, setFormData] = useState({
         organizationName: "",
         representativeName: "",
+        representativeEmail: "",
+        representativePhone: "",
+        representativeRole: "",
         description: "",
         walletAddress: "",
         officialLinks: ["", ""],
         verificationDetails: "",
         eventDate: "",
+        category: "Humanitarian",
+        goalAmount: "",
+        province: "",
+        district: "",
+        municipality: "",
         location: {
             address: "",
             coords: ""
@@ -39,6 +64,27 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<FormErrors>({});
     const [touched, setTouched] = useState<Record<string, boolean>>({});
+    const [step, setStep] = useState(1); // Multi-step form: 1=details, 2=documents, 3=review
+    const [campaignId, setCampaignId] = useState<string | null>(null);
+    const [documents, setDocuments] = useState<{
+        ngoRegistration: File | null;
+        taxExemption: File | null;
+        representativeId: File | null;
+        representativePhoto: File | null;
+    }>({
+        ngoRegistration: null,
+        taxExemption: null,
+        representativeId: null,
+        representativePhoto: null,
+    });
+    const [uploadProgress, setUploadProgress] = useState<Record<string, boolean>>({});
+
+    const fileInputRefs = {
+        ngoRegistration: useRef<HTMLInputElement>(null),
+        taxExemption: useRef<HTMLInputElement>(null),
+        representativeId: useRef<HTMLInputElement>(null),
+        representativePhoto: useRef<HTMLInputElement>(null),
+    };
 
     const toErrorKey = (fieldName: string): keyof FormErrors => {
         if (fieldName === 'location.address') return 'locationAddress';
@@ -46,9 +92,12 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
         return fieldName as keyof FormErrors;
     };
 
-    // Validate Solana wallet address format
     const isValidSolanaAddress = (address: string): boolean => {
         return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
+    };
+
+    const isValidEmail = (email: string): boolean => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
 
     const validateField = useCallback((name: string, value: string): string | undefined => {
@@ -59,6 +108,9 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                 break;
             case 'representativeName':
                 if (!value.trim()) return 'Representative name is required';
+                break;
+            case 'representativeEmail':
+                if (value && !isValidEmail(value)) return 'Invalid email address';
                 break;
             case 'description':
                 if (!value.trim()) return 'Description is required';
@@ -81,11 +133,14 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
             case 'location.coords':
                 if (!value.trim()) return 'Please pin the location on the map';
                 break;
+            case 'goalAmount':
+                if (value && (isNaN(Number(value)) || Number(value) < 0)) return 'Invalid goal amount';
+                break;
         }
         return undefined;
     }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         
         if (name.includes("location.")) {
@@ -98,14 +153,13 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
             setFormData(prev => ({ ...prev, [name]: value }));
         }
 
-        // Validate on change if field has been touched
         if (touched[name]) {
             const error = validateField(name, value);
             setErrors(prev => ({ ...prev, [toErrorKey(name)]: error }));
         }
     };
 
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setTouched(prev => ({ ...prev, [name]: true }));
         const error = validateField(name, value);
@@ -131,6 +185,42 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
         } else {
             toast.error("Maximum 5 links allowed");
         }
+    };
+
+    const handleFileChange = (type: keyof typeof documents) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error('File too large. Max 5MB.');
+            return;
+        }
+
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+        if (!allowedTypes.includes(file.type)) {
+            toast.error('Invalid file type. Use JPEG, PNG, WebP, or PDF.');
+            return;
+        }
+
+        setDocuments(prev => ({ ...prev, [type]: file }));
+    };
+
+    const uploadDocument = async (file: File, type: string, cId: string) => {
+        const formDataObj = new FormData();
+        formDataObj.append('file', file);
+        formDataObj.append('campaignId', cId);
+        formDataObj.append('documentType', type);
+
+        const res = await fetch('/api/upload-documents', {
+            method: 'POST',
+            body: formDataObj,
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to upload ${type}`);
+        }
+
+        return res.json();
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -167,15 +257,82 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
         setLoading(true);
 
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            toast.success("Fundraiser verification request submitted!");
-            onCancel();
-        } catch {
-            toast.error("Failed to submit. Please try again.");
+            // Step 1: Submit campaign data to database
+            const res = await fetch('/api/submit-campaign', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    organizationName: formData.organizationName,
+                    representativeName: formData.representativeName,
+                    representativeEmail: formData.representativeEmail,
+                    representativePhone: formData.representativePhone,
+                    representativeRole: formData.representativeRole,
+                    description: formData.description,
+                    walletAddress: formData.walletAddress,
+                    officialLinks: formData.officialLinks.filter(l => l.trim()),
+                    verificationDetails: formData.verificationDetails,
+                    eventDate: formData.eventDate,
+                    locationAddress: formData.location.address,
+                    locationCoords: formData.location.coords,
+                    province: formData.province,
+                    district: formData.district,
+                    municipality: formData.municipality,
+                    category: formData.category,
+                    goalAmount: parseFloat(formData.goalAmount) || 0,
+                }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Failed to submit campaign');
+            }
+
+            setCampaignId(data.campaignId);
+            setStep(2); // Move to document upload step
+            toast.success("Campaign submitted! Now upload your documents.");
+        } catch (error) {
+            const errMsg = error instanceof Error ? error.message : 'Failed to submit. Please try again.';
+            toast.error(errMsg);
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleDocumentUpload = async () => {
+        if (!campaignId) return;
+        setLoading(true);
+
+        const uploads = [
+            { file: documents.ngoRegistration, type: 'ngo_registration', label: 'NGO Registration' },
+            { file: documents.taxExemption, type: 'tax_exemption', label: 'Tax Exemption' },
+            { file: documents.representativeId, type: 'representative_id', label: 'Representative ID' },
+            { file: documents.representativePhoto, type: 'representative_photo', label: 'Representative Photo' },
+        ];
+
+        let successCount = 0;
+
+        for (const upload of uploads) {
+            if (upload.file) {
+                try {
+                    setUploadProgress(prev => ({ ...prev, [upload.type]: true }));
+                    await uploadDocument(upload.file, upload.type, campaignId);
+                    successCount++;
+                    setUploadProgress(prev => ({ ...prev, [upload.type]: false }));
+                } catch {
+                    toast.error(`Failed to upload ${upload.label}`);
+                    setUploadProgress(prev => ({ ...prev, [upload.type]: false }));
+                }
+            }
+        }
+
+        setLoading(false);
+
+        if (successCount > 0) {
+            toast.success(`${successCount} document(s) uploaded successfully!`);
+        }
+
+        setStep(3); // Move to confirmation step
     };
 
     const getInputClassName = (fieldName: string) => {
@@ -190,8 +347,23 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                 <div className="form-header">
                     <h2 id="fundraiser-form-title">Start a Fundraiser</h2>
                     <p>Submit your details for verification to start raising funds.</p>
+                    {/* Step Indicator */}
+                    <div className="step-indicator">
+                        <div className={`step-dot ${step >= 1 ? 'active' : ''}`}>1</div>
+                        <div className={`step-line ${step >= 2 ? 'active' : ''}`} />
+                        <div className={`step-dot ${step >= 2 ? 'active' : ''}`}>2</div>
+                        <div className={`step-line ${step >= 3 ? 'active' : ''}`} />
+                        <div className={`step-dot ${step >= 3 ? 'active' : ''}`}>3</div>
+                    </div>
+                    <div className="step-labels">
+                        <span className={step === 1 ? 'active' : ''}>Details</span>
+                        <span className={step === 2 ? 'active' : ''}>Documents</span>
+                        <span className={step === 3 ? 'active' : ''}>Confirm</span>
+                    </div>
                 </div>
 
+                {/* Step 1: Campaign Details Form */}
+                {step === 1 && (
                 <form onSubmit={handleSubmit} className="fundraiser-form" noValidate>
                     {/* Organization Details */}
                     <div className="form-group">
@@ -205,33 +377,104 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                             onBlur={handleBlur}
                             placeholder="Registered organization name"
                             className={getInputClassName('organizationName')}
-                            aria-invalid={!!errors.organizationName}
-                            aria-describedby={errors.organizationName ? 'orgName-error' : undefined}
                             required
                         />
                         {touched.organizationName && errors.organizationName && (
-                            <span id="orgName-error" className="error-message" role="alert">{errors.organizationName}</span>
+                            <span className="error-message" role="alert">{errors.organizationName}</span>
                         )}
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="representativeName">Representative Name *</label>
-                        <input
-                            type="text"
-                            id="representativeName"
-                            name="representativeName"
-                            value={formData.representativeName}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            placeholder="Full name of authorized representative"
-                            className={getInputClassName('representativeName')}
-                            aria-invalid={!!errors.representativeName}
-                            aria-describedby={errors.representativeName ? 'repName-error' : undefined}
-                            required
-                        />
-                        {touched.representativeName && errors.representativeName && (
-                            <span id="repName-error" className="error-message" role="alert">{errors.representativeName}</span>
-                        )}
+                    <div className="form-row">
+                        <div className="form-group half">
+                            <label htmlFor="representativeName">Representative Name *</label>
+                            <input
+                                type="text"
+                                id="representativeName"
+                                name="representativeName"
+                                value={formData.representativeName}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                placeholder="Full name"
+                                className={getInputClassName('representativeName')}
+                                required
+                            />
+                            {touched.representativeName && errors.representativeName && (
+                                <span className="error-message" role="alert">{errors.representativeName}</span>
+                            )}
+                        </div>
+                        <div className="form-group half">
+                            <label htmlFor="representativeRole">Role / Title</label>
+                            <input
+                                type="text"
+                                id="representativeRole"
+                                name="representativeRole"
+                                value={formData.representativeRole}
+                                onChange={handleChange}
+                                placeholder="e.g. President, Director"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="form-row">
+                        <div className="form-group half">
+                            <label htmlFor="representativeEmail">Email Address</label>
+                            <input
+                                type="email"
+                                id="representativeEmail"
+                                name="representativeEmail"
+                                value={formData.representativeEmail}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                placeholder="email@example.com"
+                                className={getInputClassName('representativeEmail')}
+                            />
+                            {touched.representativeEmail && errors.representativeEmail && (
+                                <span className="error-message" role="alert">{errors.representativeEmail}</span>
+                            )}
+                        </div>
+                        <div className="form-group half">
+                            <label htmlFor="representativePhone">Phone Number</label>
+                            <input
+                                type="tel"
+                                id="representativePhone"
+                                name="representativePhone"
+                                value={formData.representativePhone}
+                                onChange={handleChange}
+                                placeholder="+977-XXXXXXXXXX"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="form-row">
+                        <div className="form-group half">
+                            <label htmlFor="category">Category *</label>
+                            <select
+                                id="category"
+                                name="category"
+                                value={formData.category}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                {CATEGORIES.map(cat => (
+                                    <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="form-group half">
+                            <label htmlFor="goalAmount">Fundraise Goal (SOL)</label>
+                            <input
+                                type="number"
+                                id="goalAmount"
+                                name="goalAmount"
+                                value={formData.goalAmount}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                placeholder="e.g. 100"
+                                min="0"
+                                step="0.01"
+                                className={getInputClassName('goalAmount')}
+                            />
+                        </div>
                     </div>
 
                     <div className="form-group">
@@ -245,13 +488,11 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                             placeholder="Describe your cause, goals, and impact..."
                             rows={4}
                             className={getInputClassName('description')}
-                            aria-invalid={!!errors.description}
-                            aria-describedby={errors.description ? 'desc-error' : 'desc-hint'}
                             required
                         />
-                        <span id="desc-hint" className="hint-text">{formData.description.length}/50 characters minimum</span>
+                        <span className="hint-text">{formData.description.length}/50 characters minimum</span>
                         {touched.description && errors.description && (
-                            <span id="desc-error" className="error-message" role="alert">{errors.description}</span>
+                            <span className="error-message" role="alert">{errors.description}</span>
                         )}
                     </div>
 
@@ -268,8 +509,6 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                                 onBlur={handleBlur}
                                 placeholder="Public key for receiving funds"
                                 className={`font-mono ${getInputClassName('walletAddress')}`}
-                                aria-invalid={!!errors.walletAddress}
-                                aria-describedby={errors.walletAddress ? 'wallet-error' : undefined}
                                 required
                             />
                             <div className="input-icon" aria-hidden="true">
@@ -280,7 +519,7 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                             </div>
                         </div>
                         {touched.walletAddress && errors.walletAddress && (
-                            <span id="wallet-error" className="error-message" role="alert">{errors.walletAddress}</span>
+                            <span className="error-message" role="alert">{errors.walletAddress}</span>
                         )}
                     </div>
 
@@ -295,7 +534,6 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                                 onChange={(e) => handleLinkChange(index, e.target.value)}
                                 placeholder={`Link ${index + 1} (e.g. Website, Instagram)`}
                                 className="mb-2"
-                                aria-label={`Official link ${index + 1}`}
                                 required={index === 0}
                             />
                         ))}
@@ -321,17 +559,33 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                             placeholder="Provide details to help us verify your request (Registration numbers, references, etc.)"
                             rows={3}
                             className={getInputClassName('verificationDetails')}
-                            aria-invalid={!!errors.verificationDetails}
-                            aria-describedby={errors.verificationDetails ? 'verify-error' : undefined}
                             required
                         />
                         {touched.verificationDetails && errors.verificationDetails && (
-                            <span id="verify-error" className="error-message" role="alert">{errors.verificationDetails}</span>
+                            <span className="error-message" role="alert">{errors.verificationDetails}</span>
                         )}
                     </div>
 
-                    {/* Event Info */}
+                    {/* Province/Location */}
                     <div className="form-row">
+                        <div className="form-group half">
+                            <label htmlFor="province">Province</label>
+                            <select id="province" name="province" value={formData.province} onChange={handleChange} className="form-select">
+                                <option value="">Select Province</option>
+                                {PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
+                            </select>
+                        </div>
+                        <div className="form-group half">
+                            <label htmlFor="district">District</label>
+                            <input type="text" id="district" name="district" value={formData.district} onChange={handleChange} placeholder="e.g. Kathmandu" />
+                        </div>
+                    </div>
+
+                    <div className="form-row">
+                        <div className="form-group half">
+                            <label htmlFor="municipality">Municipality</label>
+                            <input type="text" id="municipality" name="municipality" value={formData.municipality} onChange={handleChange} placeholder="e.g. Kathmandu Metropolitan" />
+                        </div>
                         <div className="form-group half">
                             <label htmlFor="eventDate">Event Date/Time *</label>
                             <input
@@ -342,42 +596,36 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 className={getInputClassName('eventDate')}
-                                aria-invalid={!!errors.eventDate}
-                                aria-describedby={errors.eventDate ? 'date-error' : undefined}
                                 required
                             />
                             {touched.eventDate && errors.eventDate && (
-                                <span id="date-error" className="error-message" role="alert">{errors.eventDate}</span>
+                                <span className="error-message" role="alert">{errors.eventDate}</span>
                             )}
                         </div>
-                        <div className="form-group half">
-                            <label htmlFor="locationAddress">Location Address *</label>
-                            <input
-                                type="text"
-                                id="locationAddress"
-                                name="location.address"
-                                value={formData.location.address}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                placeholder="Physical address"
-                                className={getInputClassName('location.address')}
-                                aria-invalid={!!errors.locationAddress}
-                                aria-describedby={errors.locationAddress ? 'location-error' : undefined}
-                                required
-                            />
-                            {touched['location.address'] && errors.locationAddress && (
-                                <span id="location-error" className="error-message" role="alert">{errors.locationAddress}</span>
-                            )}
-                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="locationAddress">Location Address *</label>
+                        <input
+                            type="text"
+                            id="locationAddress"
+                            name="location.address"
+                            value={formData.location.address}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            placeholder="Physical address"
+                            className={getInputClassName('location.address')}
+                            required
+                        />
+                        {touched['location.address'] && errors.locationAddress && (
+                            <span className="error-message" role="alert">{errors.locationAddress}</span>
+                        )}
                     </div>
 
                     {/* Map Picker */}
                     <div className="form-group">
                         <label htmlFor="map-picker">Map Location Verification *</label>
-                        <MapPicker
-                            value={formData.location.coords}
-                            onChange={handleMapSelect}
-                        />
+                        <MapPicker value={formData.location.coords} onChange={handleMapSelect} />
                         <div className="map-coords-row">
                             <input
                                 id="map-picker"
@@ -388,44 +636,140 @@ const FundraiserForm = ({ onCancel }: FundraiserFormProps) => {
                                 onBlur={handleBlur}
                                 className={getInputClassName('location.coords')}
                                 placeholder="Latitude,Longitude"
-                                aria-invalid={!!errors.locationCoords}
-                                aria-describedby={errors.locationCoords ? 'map-error' : undefined}
                                 readOnly
                             />
                             <span className="hint-text">Kathmandu default — click map to set exact point</span>
                         </div>
                         {touched['location.coords'] && errors.locationCoords && (
-                            <span id="map-error" className="error-message" role="alert">{errors.locationCoords}</span>
+                            <span className="error-message" role="alert">{errors.locationCoords}</span>
                         )}
                     </div>
 
                     {/* Actions */}
                     <div className="form-actions">
-                        <button 
-                            type="button" 
-                            onClick={onCancel} 
-                            className="btn-secondary"
-                            disabled={loading}
-                        >
-                            Cancel
-                        </button>
-                        <button 
-                            type="submit" 
-                            className="btn-primary" 
-                            disabled={loading}
-                            aria-busy={loading}
-                        >
-                            {loading ? (
-                                <>
-                                    <span className="spinner" aria-hidden="true" />
-                                    Submitting...
-                                </>
-                            ) : (
-                                "Submit for Verification"
-                            )}
+                        <button type="button" onClick={onCancel} className="btn-secondary" disabled={loading}>Cancel</button>
+                        <button type="submit" className="btn-primary" disabled={loading} aria-busy={loading}>
+                            {loading ? (<><span className="spinner" aria-hidden="true" />Submitting...</>) : "Submit & Continue to Documents"}
                         </button>
                     </div>
                 </form>
+                )}
+
+                {/* Step 2: Document Upload */}
+                {step === 2 && (
+                <div className="fundraiser-form">
+                    <div className="doc-upload-section">
+                        <h3>Upload Verification Documents</h3>
+                        <p className="hint-text">Upload supporting documents to speed up verification. All files max 5MB.</p>
+
+                        <div className="doc-upload-grid">
+                            <div className="doc-upload-card">
+                                <div className="doc-icon">📄</div>
+                                <h4>NGO Registration Certificate</h4>
+                                <p>Government registration document</p>
+                                <input type="file" ref={fileInputRefs.ngoRegistration} onChange={handleFileChange('ngoRegistration')} accept=".jpg,.jpeg,.png,.webp,.pdf" hidden />
+                                <button type="button" className="doc-upload-btn" onClick={() => fileInputRefs.ngoRegistration.current?.click()} disabled={!!uploadProgress.ngo_registration}>
+                                    {documents.ngoRegistration ? `✓ ${documents.ngoRegistration.name}` : 'Choose File'}
+                                </button>
+                            </div>
+
+                            <div className="doc-upload-card">
+                                <div className="doc-icon">📋</div>
+                                <h4>Tax Exemption Document</h4>
+                                <p>Tax exemption certificate if applicable</p>
+                                <input type="file" ref={fileInputRefs.taxExemption} onChange={handleFileChange('taxExemption')} accept=".jpg,.jpeg,.png,.webp,.pdf" hidden />
+                                <button type="button" className="doc-upload-btn" onClick={() => fileInputRefs.taxExemption.current?.click()} disabled={!!uploadProgress.tax_exemption}>
+                                    {documents.taxExemption ? `✓ ${documents.taxExemption.name}` : 'Choose File'}
+                                </button>
+                            </div>
+
+                            <div className="doc-upload-card">
+                                <div className="doc-icon">🪪</div>
+                                <h4>Representative ID Card</h4>
+                                <p>Citizenship, passport, or national ID</p>
+                                <input type="file" ref={fileInputRefs.representativeId} onChange={handleFileChange('representativeId')} accept=".jpg,.jpeg,.png,.webp,.pdf" hidden />
+                                <button type="button" className="doc-upload-btn" onClick={() => fileInputRefs.representativeId.current?.click()} disabled={!!uploadProgress.representative_id}>
+                                    {documents.representativeId ? `✓ ${documents.representativeId.name}` : 'Choose File'}
+                                </button>
+                            </div>
+
+                            <div className="doc-upload-card">
+                                <div className="doc-icon">📸</div>
+                                <h4>Representative Photo</h4>
+                                <p>Clear headshot photo for display</p>
+                                <input type="file" ref={fileInputRefs.representativePhoto} onChange={handleFileChange('representativePhoto')} accept=".jpg,.jpeg,.png,.webp" hidden />
+                                <button type="button" className="doc-upload-btn" onClick={() => fileInputRefs.representativePhoto.current?.click()} disabled={!!uploadProgress.representative_photo}>
+                                    {documents.representativePhoto ? `✓ ${documents.representativePhoto.name}` : 'Choose File'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="form-actions">
+                        <button type="button" onClick={() => { setStep(3); }} className="btn-secondary">Skip for Now</button>
+                        <button type="button" onClick={handleDocumentUpload} className="btn-primary" disabled={loading}>
+                            {loading ? (<><span className="spinner" aria-hidden="true" />Uploading...</>) : "Upload Documents"}
+                        </button>
+                    </div>
+                </div>
+                )}
+
+                {/* Step 3: Confirmation */}
+                {step === 3 && (
+                <div className="fundraiser-form confirmation-step">
+                    <div className="confirmation-card">
+                        <div className="confirmation-icon">✅</div>
+                        <h3>Campaign Submitted Successfully!</h3>
+                        <p>Thank you for submitting your campaign for verification.</p>
+
+                        {campaignId && (
+                            <div className="campaign-id-display">
+                                <span className="label">Campaign ID:</span>
+                                <code>{campaignId}</code>
+                            </div>
+                        )}
+
+                        <div className="verification-timeline">
+                            <div className="timeline-item active">
+                                <div className="timeline-dot" />
+                                <div>
+                                    <strong>Submitted</strong>
+                                    <p>Your campaign has been received</p>
+                                </div>
+                            </div>
+                            <div className="timeline-item">
+                                <div className="timeline-dot" />
+                                <div>
+                                    <strong>Under Review</strong>
+                                    <p>Our team will review your documents (1-3 days)</p>
+                                </div>
+                            </div>
+                            <div className="timeline-item">
+                                <div className="timeline-dot" />
+                                <div>
+                                    <strong>Verification Meeting</strong>
+                                    <p>We&apos;ll schedule a call or site visit</p>
+                                </div>
+                            </div>
+                            <div className="timeline-item">
+                                <div className="timeline-dot" />
+                                <div>
+                                    <strong>Campaign Live!</strong>
+                                    <p>Your verified campaign goes live for donations</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {formData.representativeEmail && (
+                            <p className="hint-text">A confirmation email has been sent to {formData.representativeEmail}</p>
+                        )}
+                    </div>
+
+                    <div className="form-actions">
+                        <button type="button" onClick={onCancel} className="btn-primary">Back to Home</button>
+                    </div>
+                </div>
+                )}
             </div>
         </section>
     );

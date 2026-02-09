@@ -27,6 +27,9 @@ const DonateButton = ({
     campaignTitle,
 }: DonateButtonProps) => {
     const [amount, setAmount] = useState<string>("");
+    const [donorName, setDonorName] = useState<string>("");
+    const [donorMessage, setDonorMessage] = useState<string>("");
+    const [anonymous, setAnonymous] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [txPhase, setTxPhase] = useState<string>("");
 
@@ -179,7 +182,26 @@ const DonateButton = ({
                 throw new Error("Transaction failed to confirm on-chain");
             }
 
-            // Step 9: Show success with confetti
+            // Step 9: Record donation in database
+            try {
+                await fetch('/api/submit-donation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        campaign_id: campaignId,
+                        donor_wallet: publicKey.toString(),
+                        amount: donationAmount,
+                        tx_signature: signature,
+                        anonymous,
+                        donor_name: anonymous ? null : donorName || null,
+                        message: donorMessage || null,
+                    }),
+                });
+            } catch {
+                console.warn("Failed to record donation in database");
+            }
+
+            // Step 10: Show success with confetti
             toast.dismiss(loadingToast);
             fireConfetti();
             toast.success(
@@ -209,6 +231,9 @@ const DonateButton = ({
             );
 
             setAmount("");
+            setDonorName("");
+            setDonorMessage("");
+            setAnonymous(false);
         } catch (error: unknown) {
             toast.dismiss(loadingToast);
 
@@ -255,6 +280,9 @@ const DonateButton = ({
         publicKey,
         connected,
         amount,
+        donorName,
+        donorMessage,
+        anonymous,
         walletAddress,
         campaignTitle,
         connection,
@@ -317,6 +345,42 @@ const DonateButton = ({
             {amount && parseFloat(amount) > MAX_DONATION_SOL && (
                 <p className="donation-hint error">Maximum donation: {MAX_DONATION_SOL} SOL per transaction</p>
             )}
+
+            {/* Donor Info */}
+            <div className="donor-info-section">
+                <p className="donor-section-label">🙏 Donor Info <span>(optional)</span></p>
+                <label className="anonymous-toggle">
+                    <input
+                        type="checkbox"
+                        checked={anonymous}
+                        onChange={(e) => {
+                            setAnonymous(e.target.checked);
+                            if (e.target.checked) setDonorName('');
+                        }}
+                        disabled={isLoading}
+                    />
+                    <span>Donate anonymously</span>
+                </label>
+                {!anonymous && (
+                    <input
+                        type="text"
+                        value={donorName}
+                        onChange={(e) => setDonorName(e.target.value)}
+                        placeholder="Your name (shown publicly)"
+                        className="donor-input"
+                        disabled={isLoading}
+                    />
+                )}
+                <input
+                    type="text"
+                    value={donorMessage}
+                    onChange={(e) => setDonorMessage(e.target.value)}
+                    placeholder="Leave a message of support..."
+                    className="donor-input"
+                    disabled={isLoading}
+                    maxLength={200}
+                />
+            </div>
 
             {/* Donate Button with loading states */}
             <button

@@ -7,6 +7,7 @@ import SplashScreen from "./components/SplashScreen";
 import MissionSection from "./components/MissionSection";
 import CampaignCard from "./components/CampaignCard";
 import DonateButton from "./components/DonateButton";
+import DonationModal from "./components/DonationModal";
 import FundraiserForm from "./components/FundraiserForm";
 import campaignsData from "./lib/campaigns.json";
 import { Toaster, toast } from "react-hot-toast";
@@ -49,6 +50,7 @@ export default function Home() {
   const [isFundraiserFormOpen, setIsFundraiserFormOpen] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [donationModalCampaign, setDonationModalCampaign] = useState<Campaign | null>(null);
 
   // Refs for navigation anchoring
   const campaignsSectionRef = useRef<HTMLElement>(null);
@@ -758,7 +760,7 @@ export default function Home() {
           <div className="footer-links">
             <div className="footer-column">
               <h4>{t.platform}</h4>
-              <a href="#">{t.howItWorks}</a>
+              <a href="/verify">Verify Campaign</a>
               <a href="#" onClick={(e) => { e.preventDefault(); setIsFundraiserFormOpen(true); }}>{t.startFundraiser}</a>
               <a href="#" onClick={(e) => { e.preventDefault(); handleLogoClick(); }}>{t.browseCauses}</a>
             </div>
@@ -785,6 +787,18 @@ export default function Home() {
         </div>
       </footer>
     </main>
+
+    {/* Donation Modal */}
+    {donationModalCampaign && (
+      <DonationModal
+        isOpen={!!donationModalCampaign}
+        onClose={() => setDonationModalCampaign(null)}
+        campaignId={donationModalCampaign.id}
+        walletAddress={donationModalCampaign.walletAddress}
+        campaignTitle={donationModalCampaign.title}
+        campaignOrganizer={donationModalCampaign.organizer}
+      />
+    )}
     </>
   );
 }

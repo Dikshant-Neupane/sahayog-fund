@@ -61,6 +61,9 @@ interface Campaign {
     beneficiaries?: number;
     verified?: boolean;
     tags?: string[];
+    representativeName?: string;
+    representativeRole?: string;
+    representativePhoto?: string;
 }
 
 interface CampaignCardProps {
@@ -196,6 +199,11 @@ const CampaignCard = memo(function CampaignCard({ campaign, onClick }: CampaignC
                         <circle cx="12" cy="7" r="4" />
                     </svg>
                     {campaign.organizer}
+                    {campaign.verified && (
+                        <span className="verification-badge">
+                            <span className="badge-icon">✓</span> Verified
+                        </span>
+                    )}
                 </p>
 
                 {/* Description */}
@@ -233,6 +241,27 @@ const CampaignCard = memo(function CampaignCard({ campaign, onClick }: CampaignC
                         </div>
                     </div>
                 </div>
+
+                {/* Representative Info */}
+                {campaign.representativeName && (
+                    <div className="representative-info">
+                        {campaign.representativePhoto && (
+                            <Image
+                                src={campaign.representativePhoto}
+                                alt={campaign.representativeName}
+                                width={40}
+                                height={40}
+                                className="representative-photo"
+                            />
+                        )}
+                        <div className="representative-details">
+                            <span className="representative-name">{campaign.representativeName}</span>
+                            {campaign.representativeRole && (
+                                <span className="representative-role">{campaign.representativeRole}</span>
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {/* Footer Row */}
                 <div className="card-footer">
