@@ -10,26 +10,83 @@
 </p>
 
 <p align="center">
-  <a href="#demo">View Demo</a> •
+  <a href="#live-demo">Live Demo</a> •
   <a href="#features">Features</a> •
+  <a href="#problem-statement">Problem</a> •
   <a href="#why-solana">Why Solana?</a> •
   <a href="#architecture">Architecture</a> •
   <a href="#installation">Installation</a> •
   <a href="#smart-contract">Smart Contract</a> •
-  <a href="#deployment">Deployment</a>
+  <a href="#team">Team</a>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Solana-Devnet-9945FF?style=for-the-badge&logo=solana&logoColor=white" alt="Solana Devnet" />
   <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js 15" />
-  <img src="https://img.shields.io/badge/Anchor-0.30-blue?style=for-the-badge" alt="Anchor Framework" />
+  <img src="https://img.shields.io/badge/Anchor-0.32-blue?style=for-the-badge" alt="Anchor Framework" />
   <img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Supabase-Backend-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
   <img src="https://img.shields.io/badge/Deployed-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
 </p>
 
 ---
 
-## 🎯 Problem Statement
+## 👤 Team <a id="team"></a>
+
+| Name | Role | GitHub |
+|------|------|--------|
+| **Dikshant Neupane** | Solo Developer — Full Stack + Smart Contract | [@Dikshant-Neupane](https://github.com/Dikshant-Neupane) |
+
+---
+
+## 🌐 Live Demo & Links <a id="live-demo"></a>
+
+| Resource | Link |
+|----------|------|
+| **Live App** | [https://sahayog-fund.vercel.app/](https://sahayog-fund.vercel.app/) |
+| **Demo Video** | [Watch on YouTube](https://youtube.com/shorts/vaLxCGBtSdI?si=s4djn2xTmxfUiU8W) |
+| **Smart Contract (Solana Explorer)** | [View on Explorer](https://explorer.solana.com/address/Buv5zyTkgj1pDDLKrt9q6Yy39vndTfFumEk7cLdwzmsA?cluster=devnet) |
+| **GitHub Repo** | [github.com/Dikshant-Neupane/sahayog-fund](https://github.com/Dikshant-Neupane/sahayog-fund) |
+
+> **Note:** The app runs on **Solana Devnet**. You'll need a Phantom or Solflare wallet with Devnet SOL ([get free Devnet SOL here](https://faucet.solana.com)).
+
+---
+
+## � Screenshots
+
+<p align="center">
+  <img src="public/Screenshot%202026-02-09%20215508.png" alt="Homepage" width="100%" />
+  <br /><em>Homepage — Campaign grid with search, filters, and social proof feed</em>
+</p>
+
+<p align="center">
+  <img src="public/Screenshot%202026-02-09%20215517.png" alt="Campaign Details" width="100%" />
+  <br /><em>Campaign details and donation flow</em>
+</p>
+
+<p align="center">
+  <img src="public/Screenshot%202026-02-09%20215527.png" alt="Donation & Wallet" width="100%" />
+  <br /><em>Wallet connection and donation experience</em>
+</p>
+
+<p align="center">
+  <img src="public/Screenshot%202026-02-09%20215537.png" alt="Verification Dashboard" width="100%" />
+  <br /><em>Campaign verification and admin dashboard</em>
+</p>
+
+---
+
+## �📖 Project Description
+
+**SahayogFund** (सहयोगफन्ड) is Nepal's first transparent, blockchain-powered donation platform built on **Solana**. It enables anyone in the world to donate directly to verified Nepali causes — from disaster relief to education — with near-zero fees, instant settlement, and full on-chain transparency.
+
+Donors connect a Solana wallet (Phantom/Solflare), browse verified campaigns, and donate SOL in under a second. Every transaction is publicly verifiable on the Solana blockchain. Campaign creators submit their causes through a verification workflow backed by Supabase, ensuring only legitimate fundraisers go live.
+
+The platform features bilingual support (English/Nepali), mobile-first responsive design, on-chain donation tracking, and an admin verification dashboard — all built as a solo project by Dikshant Neupane.
+
+---
+
+## 🎯 Problem Statement <a id="problem-statement"></a>
 
 > "Many Nepalis want to donate to verified causes but don't trust random fundraisers."
 
@@ -181,50 +238,77 @@ We evaluated Ethereum, Polygon, Avalanche, and Solana for this use case. Here's 
 
 | Layer | Technology |
 |-------|------------|
-| **Frontend** | Next.js 15 (App Router), React 19, TypeScript |
-| **Styling** | Tailwind CSS v4, CSS Custom Properties, Framer Motion |
+| **Frontend** | Next.js 15 (App Router), React 19, TypeScript 5 |
+| **Styling** | Tailwind CSS v4, Custom Nepal-themed CSS |
 | **Blockchain** | Solana (Devnet), Anchor Framework 0.32 |
 | **Wallet** | Solana Wallet Adapter (Phantom, Solflare) |
-| **State** | React Context (Wallet, Language, Theme) |
-| **Notifications** | React Hot Toast |
+| **Backend / Database** | Supabase (PostgreSQL), Next.js API Routes |
+| **Email** | Resend (transactional campaign notifications) |
+| **Maps** | Leaflet.js (location picker for campaigns) |
+| **State** | React Context (Wallet, Language) |
+| **Notifications** | React Hot Toast, Canvas Confetti |
 | **Hosting** | Vercel (Edge Network) |
 | **Smart Contract** | Rust + Anchor (PDAs, Custom Errors, Constraints) |
 
 ---
 
-## 📦 Installation
+## 📦 Installation & Setup <a id="installation"></a>
 
 ### Prerequisites
-- Node.js 18+ (LTS recommended)
-- pnpm / npm / yarn
-- Solana Wallet Extension (Phantom or Solflare)
-- Devnet SOL for testing ([Faucet](https://faucet.solana.com))
 
-### Quick Start
+| Requirement | Version | Notes |
+|------------|---------|-------|
+| **Node.js** | 18+ (LTS) | [Download](https://nodejs.org/) |
+| **npm / pnpm / yarn** | Latest | Comes with Node.js |
+| **Git** | Latest | [Download](https://git-scm.com/) |
+| **Solana Wallet** | — | [Phantom](https://phantom.app/) or [Solflare](https://solflare.com/) browser extension |
+| **Devnet SOL** | — | Free from [faucet.solana.com](https://faucet.solana.com) |
+
+### Step-by-Step Setup
 
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/Dikshant-Neupane/sahayog-fund.git
 cd sahayog-fund
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Configure environment
+# 3. Create environment file
 cp .env.example .env.local
-# Edit .env.local with your RPC endpoint
-
-# Run development server
-npm run dev
 ```
 
-### Environment Variables
+**4. Configure `.env.local`** with the following variables:
 
 ```env
-# .env.local
+# Solana Configuration
 NEXT_PUBLIC_SOLANA_NETWORK=devnet
 NEXT_PUBLIC_RPC_ENDPOINT=https://api.devnet.solana.com
 NEXT_PUBLIC_PROGRAM_ID=Buv5zyTkgj1pDDLKrt9q6Yy39vndTfFumEk7cLdwzmsA
+
+# Supabase (for campaign verification backend)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Resend (for email notifications — optional)
+RESEND_API_KEY=your_resend_api_key
+```
+
+```bash
+# 5. Run the development server
+npm run dev
+```
+
+**6. Open the app** at [http://localhost:3000](http://localhost:3000)
+
+**7. Connect your wallet** — Switch to Devnet in Phantom/Solflare and get free SOL from the [faucet](https://faucet.solana.com)
+
+### Other Commands
+
+```bash
+npm run build    # Production build
+npm run start    # Start production server
+npm run lint     # Run ESLint
 ```
 
 ---
@@ -464,6 +548,22 @@ npm test -- CampaignCard.test.tsx
 
 ---
 
+## �️ Technologies Used (Summary)
+
+| Category | Technologies |
+|----------|-------------|
+| **Frontend** | Next.js 15 (App Router), React 19, TypeScript 5 |
+| **Styling** | Tailwind CSS v4, Custom Nepal-themed CSS (3300+ lines) |
+| **Blockchain** | Solana (Devnet), Anchor Framework 0.32, Rust |
+| **Wallet Integration** | Solana Wallet Adapter (Phantom, Solflare) |
+| **Backend / Database** | Supabase (PostgreSQL), Next.js API Routes |
+| **Email** | Resend (transactional emails) |
+| **Maps** | Leaflet.js (campaign location picker) |
+| **Deployment** | Vercel (Edge Network), Solana Playground (smart contract) |
+| **Other** | React Hot Toast, Canvas Confetti, UUID |
+
+---
+
 ## 📄 License
 
 MIT License — see [LICENSE](LICENSE) for details.
@@ -471,7 +571,10 @@ MIT License — see [LICENSE](LICENSE) for details.
 ---
 
 <p align="center">
-  <strong>Built with ❤️ for Nepal 🇳🇵</strong>
+  <strong>Built with ❤️ for Nepal 🇳🇵 by Dikshant Neupane</strong>
   <br />
   <sub>Powered by Solana ◎ | Deployed on Vercel ▲</sub>
+  <br />
+  <br />
+  <a href="https://github.com/Dikshant-Neupane">GitHub</a>
 </p>
